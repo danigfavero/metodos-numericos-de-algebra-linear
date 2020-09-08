@@ -29,6 +29,42 @@ function dotproduct(n, x, y) result(product)
 
 end function dotproduct
 
+
+! Recebe dois inteiros n, m, uma matriz A ∈ R n×m , e dois vetores x ∈ R m , b ∈ Rn. A função
+! devolve, no vetor b, o resultado do produto matriz por vetor entre A e x, ou seja, b = Ax.
+subroutine matrixvector(n, m, A, x, b)
+    use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
+    implicit none
+    integer, intent(in) :: n
+    integer, intent(in) :: m
+    real(dp), intent(in) :: A(n,m)
+    real(dp), intent(in) :: x(m)
+    real(dp), intent(in) :: b(n)
+
+    integer :: i
+    do i=1,n
+      print *,A(i,1:m)
+    end do
+
+
+end subroutine matrixvector
+
+
+! Recebe três inteiros n, m, p e três matrizes A ∈ R n×m , X ∈ R m×p , B ∈ R n×p . A função
+! devolve, na matriz B, o resultado do produto matriz por matriz entre A e X, ou seja, B = AX.
+subroutine matrixmatrix(n, m, p, A, X, B)
+    use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
+    implicit none
+    integer, intent(in) :: n
+    integer, intent(in) :: m
+    integer, intent(in) :: p
+    real(dp), intent(in) :: A(n,m)
+    real(dp), intent(in) :: X(m,p)
+    real(dp), intent(in) :: B(n,p)
+
+end subroutine matrixmatrix
+
+
 program ep1
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
     implicit none
