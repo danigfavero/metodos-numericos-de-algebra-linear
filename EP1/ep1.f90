@@ -2,25 +2,6 @@
 ! NUSP: 10277443
 ! Exercício Programa 1 - Produto interno, norma euclidiana, e produto envolvendo matrizes e vetores
 
-function naive_euclidean_norm(n, x) result(norm)
-    use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
-    implicit none
-    integer, intent(in) :: n
-    real(dp), intent(in) :: x(n)
-    real(dp) :: y(n)
-    real(dp) :: norm
-    integer :: i
-
-    do i=1,n
-        y(i) = x(i)**2
-    enddo
-    norm = dsqrt(sum(y))
-  
-end function naive_euclidean_norm
-
-
-!-----------------------------------------------------------------------------------------------
-
 
 ! Recebe um inteiro n e dois vetores x, y ∈ R n . Devolve o produto interno entre x e y.
 function dotproduct(n, x, y) result(product)
@@ -31,7 +12,14 @@ function dotproduct(n, x, y) result(product)
     real(dp), intent(in) :: y(n)
     real(dp) :: product
 
-    product = 3
+    integer :: i
+    real(dp) :: z(n)
+
+    do i=1,n
+        z(i) = x(i) * y(i)
+    enddo
+
+    product = sum(z)
 
 end function dotproduct
 
@@ -42,20 +30,20 @@ function euclidean_norm(n, x) result(norm)
     implicit none
     integer, intent(in) :: n
     real(dp), intent(in) :: x(n)
-    real(dp) :: y(n)
     real(dp) :: norm
+
     real(dp) :: max
     integer :: i
-    
+    real(dp) :: y(n)
+
     max = maxval(x)
     do i=1,n
         y(i) = x(i) / max
         y(i) = y(i)**2
-        
     enddo
 
     norm = dsqrt(sum(y)) * 3
-  
+
 end function euclidean_norm
 
 
@@ -93,18 +81,43 @@ subroutine matrixmatrix(n, m, p, A, X, B)
 
 end subroutine matrixmatrix
 
+!-----------------------------------------------------------------------------------------------
+
+function naive_euclidean_norm(n, x) result(norm)
+    use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
+    implicit none
+    integer, intent(in) :: n
+    real(dp), intent(in) :: x(n)
+    real(dp) :: y(n)
+    real(dp) :: norm
+    integer :: i
+
+    do i=1,n
+        y(i) = x(i)**2
+    enddo
+    norm = dsqrt(sum(y))
+
+end function naive_euclidean_norm
+
 
 program ep1
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
     implicit none
-
-    ! TESTE NORMA
     real(dp) :: a(3)
     real(dp) :: naive_euclidean_norm
     real(dp) :: euclidean_norm
+    real(dp) :: dotproduct
     a = [1.0, 2.0, 3.0]
+
+    ! TESTE NORMA
     print *, "Norma inocente: ", naive_euclidean_norm(3, a)
     print *, "Norma: ", euclidean_norm(3, a)
     print *, "Norma built-in: ", norm2(a)
+
+    print *, ""
+
+    ! TESTE PRODUTO INTERNO
+    print *, "Produto interno: ", dotproduct(3, a, a)
+    print *, "Produto interno built-in: ", dot_product(a, a)
 
 end program ep1
