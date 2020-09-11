@@ -40,12 +40,15 @@ function euclidean_norm(n, x) result(norm)
     real(dp) :: y(n)
 
     max = maxval(x)
+    if (max == 0) then
+        max = 1
+    endif
+    
     do i=1,n
-        y(i) = x(i) / max
-        y(i) = y(i)**2
+        y(i) = (x(i) / max)**2
     enddo
 
-    norm = dsqrt(sum(y)) * 3
+    norm = dsqrt(sum(y)) * abs(max)
 
 end function euclidean_norm
 
@@ -65,8 +68,12 @@ subroutine matrixvector(n, m, A, x, b)
     integer :: i
     integer :: j
     do i=1,n
-        do j=1,m
-            b(j) = b(j) + A(j,i) * x(i)
+        b(i) = 0
+    enddo
+
+    do j=1,m
+        do i=1,n
+            b(i) = b(i) + A(i,j) * x(j)
         enddo
     enddo
 
@@ -91,9 +98,14 @@ subroutine matrixmatrix(n, m, p, A, X, B)
     integer :: k
 
     do i=1,n
-        do j=1,m
+        do j=1,p
             B(i,j) = 0
-            do k=1,p
+        enddo
+    enddo
+
+    do k=1,p
+        do j=1,m
+            do i=1,n
                 B(i,k) = B(i,k) + A(i,j) * X(j,k)
             enddo
         enddo
@@ -171,7 +183,6 @@ program ep1
     real(dp) :: v(3)
     real(dp) :: naive_euclidean_norm
     real(dp) :: euclidean_norm
-    real(dp) :: dotproduct
     real(dp), allocatable :: M(:,:)
     real(dp), allocatable :: q(:)
     real(dp), allocatable :: u(:)
@@ -183,80 +194,66 @@ program ep1
     real(kind=8)::start,finish
 
     ! TESTE NORMA
-    v = [1.0, 2.0, 3.0]
-    print *, "Norma inocente: ", naive_euclidean_norm(3, v)
-    print *, "Norma: ", euclidean_norm(3, v)
-    print *, "Norma built-in: ", norm2(v)
-
-    print *, ""
-
-    ! TESTE PRODUTO INTERNO
-    print *, "Produto interno: ", dotproduct(3, v, v)
-    print *, "Produto interno built-in: ", dot_product(v, v)
-
-    print *, ""
-
-    ! TESTE MATRIZ VETOR
-    meunumero = 200
-    allocate(M(meunumero,meunumero))
-    allocate(q(meunumero))
-    allocate(u(meunumero))
-    do i=1,meunumero
-        q(i) = i * 3.1
-        do j=1,meunumero
-            M(i,j) = i+j * 2.7
-        enddo
+    do i=3,40
+        v = [3*(10**i), 2*(10**(i-1)), 1*(10**(i-2))]
+        print *, "Vetor: ", i
+        print *, "Norma inocente: ", naive_euclidean_norm(3, v)
+        print *, "Norma: ", euclidean_norm(3, v)
     enddo
 
-    call cpu_time(start)
-    call matrixvector(meunumero, meunumero, M, q, u)
-    call cpu_time(finish)
-    print *, "Produto matriz vetor: ", finish-start
-
-    call cpu_time(start)
-    call naive_matrixvector(meunumero, meunumero, M, q, u)
-    call cpu_time(finish)
-    print *, "Produto matriz vetor naive: ", finish-start
-
-    call cpu_time(start)
-    u = matmul(M, q)
-    call cpu_time(finish)
-    print *, "Produto matriz vetor built-in: ", finish-start
-
-    deallocate(q)
-    deallocate(u)
-    deallocate(M)
     print *, ""
 
-    ! TESTE MATRIZ MATRIZ
-    meunumero = 3
-    allocate(M(meunumero,meunumero))
-    allocate(N(meunumero,meunumero))
-    allocate(O(meunumero,meunumero))
-    do i=1,meunumero
-        do j=1,meunumero
-            M(i,j) = i+j * 2.7
-            N(i,j) = i-j * 4.2
-        enddo
-    enddo
+    ! ! TESTE MATRIZ VETOR
+    ! meunumero = 200
+    ! allocate(M(meunumero,meunumero))
+    ! allocate(q(meunumero))
+    ! allocate(u(meunumero))
+    ! do i=1,meunumero
+    !     q(i) = i * 3.1
+    !     do j=1,meunumero
+    !         M(i,j) = i+j * 2.7
+    !     enddo
+    ! enddo
 
-    call cpu_time(start)
-    call naive_matrixmatrix(meunumero, meunumero, meunumero, M, N, O)
-    call cpu_time(finish)
-    print *, "Multiplicação de matrizes naive: ", finish-start
+    ! call cpu_time(start)
+    ! call matrixvector(meunumero, meunumero, M, q, u)
+    ! call cpu_time(finish)
+    ! print *, "Produto matriz vetor: ", finish-start
 
-    call cpu_time(start)
-    call matrixmatrix(meunumero, meunumero, meunumero, M, N, O)
-    call cpu_time(finish)
-    print *, "Multiplicação de matrizes: ", finish-start
-    
-    call cpu_time(start)
-    O = matmul(M, N)
-    call cpu_time(finish)
-    print *, "Multiplicação de matrizes vetor built-in: ", finish-start
+    ! call cpu_time(start)
+    ! call naive_matrixvector(meunumero, meunumero, M, q, u)
+    ! call cpu_time(finish)
+    ! print *, "Produto matriz vetor naive: ", finish-start
 
-    deallocate(M)
-    deallocate(N)
-    deallocate(O)
+    ! deallocate(q)
+    ! deallocate(u)
+    ! deallocate(M)
+    ! print *, ""
+
+    ! ! TESTE MATRIZ MATRIZ
+    ! meunumero = 10
+    ! allocate(M(meunumero,meunumero))
+    ! allocate(N(meunumero,meunumero))
+    ! allocate(O(meunumero,meunumero))
+    ! do i=1,meunumero
+    !     do j=1,meunumero
+    !         M(i,j) = i+j * 3.3
+    !         N(i,j) = i-j * 1.4
+    !     enddo
+    ! enddo
+
+    ! call cpu_time(start)
+    ! call naive_matrixmatrix(meunumero, meunumero, meunumero, M, N, O)
+    ! call cpu_time(finish)
+    ! print *, "Multiplicação de matrizes naive: ", finish-start
+
+    ! call cpu_time(start)
+    ! call matrixmatrix(meunumero, meunumero, meunumero, M, N, O)
+    ! call cpu_time(finish)
+    ! print *, "Multiplicação de matrizes: ", finish-start
+
+    ! deallocate(M)
+    ! deallocate(N)
+    ! deallocate(O)
 
 end program ep1
