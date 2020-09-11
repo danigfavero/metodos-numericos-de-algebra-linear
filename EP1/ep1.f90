@@ -86,6 +86,19 @@ subroutine matrixmatrix(n, m, p, A, X, B)
     real(dp), intent(in) :: X(m,p)
     real(dp) :: B(n,p)
 
+    integer :: i
+    integer :: j
+    integer :: k
+
+    do i=1,n
+        do j=1,m
+            B(i,j) = 0
+            do k=1,p
+                B(i,k) = B(i,k) + A(i,j) * X(j,k)
+            enddo
+        enddo
+    enddo
+
 end subroutine matrixmatrix
 
 ! -----------------------------------------------------------------------------
@@ -126,6 +139,31 @@ subroutine naive_matrixvector(n, m, A, x, b)
 
 end subroutine naive_matrixvector
 
+subroutine naive_matrixmatrix(n, m, p, A, X, B)
+    use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
+    implicit none
+    integer, intent(in) :: n
+    integer, intent(in) :: m
+    integer, intent(in) :: p
+    real(dp), intent(in) :: A(n,m)
+    real(dp), intent(in) :: X(m,p)
+    real(dp) :: B(n,p)
+
+    integer :: i
+    integer :: j
+    integer :: k
+
+    do i=1,n
+        do j=1,m
+            B(i,j) = 0
+            do k=1,p
+                B(i,k) = B(i,k) + A(i,j) * X(j,k)
+            enddo
+        enddo
+    enddo
+
+end subroutine naive_matrixmatrix
+
 
 program ep1
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
@@ -159,7 +197,7 @@ program ep1
     print *, ""
 
     ! TESTE MATRIZ VETOR
-    meunumero = 20000
+    meunumero = 200
     allocate(M(meunumero,meunumero))
     allocate(q(meunumero))
     allocate(u(meunumero))
@@ -185,26 +223,40 @@ program ep1
     call cpu_time(finish)
     print *, "Produto matriz vetor built-in: ", finish-start
 
-    deallocate(M)
     deallocate(q)
     deallocate(u)
-
+    deallocate(M)
     print *, ""
 
     ! TESTE MATRIZ MATRIZ
-    ! meunumero = 20000
-    ! allocate(M(meunumero,meunumero))
-    ! allocate(N(meunumero,meunumero))
-    ! allocate(O(meunumero,meunumero))
-    ! do i=1,meunumero
-    !     q(i) = i * 3.1
-    !     do j=1,meunumero
-    !         M(i,j) = i+j * 2.7
-    !     enddo
-    ! enddo
-    ! call matrixmatrix(3, 3, 3, M, N, O)
-    ! print *, "Multiplicação de matrizes: ", O
-    ! print *, "Multiplicação de matrizes built-in: ", matmul(M, N)
+    meunumero = 3
+    allocate(M(meunumero,meunumero))
+    allocate(N(meunumero,meunumero))
+    allocate(O(meunumero,meunumero))
+    do i=1,meunumero
+        do j=1,meunumero
+            M(i,j) = i+j * 2.7
+            N(i,j) = i-j * 4.2
+        enddo
+    enddo
 
+    call cpu_time(start)
+    call naive_matrixmatrix(meunumero, meunumero, meunumero, M, N, O)
+    call cpu_time(finish)
+    print *, "Multiplicação de matrizes naive: ", finish-start
+
+    call cpu_time(start)
+    call matrixmatrix(meunumero, meunumero, meunumero, M, N, O)
+    call cpu_time(finish)
+    print *, "Multiplicação de matrizes: ", finish-start
+    
+    call cpu_time(start)
+    O = matmul(M, N)
+    call cpu_time(finish)
+    print *, "Multiplicação de matrizes vetor built-in: ", finish-start
+
+    deallocate(M)
+    deallocate(N)
+    deallocate(O)
 
 end program ep1
