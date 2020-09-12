@@ -49,9 +49,6 @@ function euclidean_norm(n, x) result(norm)
     enddo
 
     norm = dsqrt(sum(y)) * abs(max)
-    if (isnan(norm)) then
-        norm = ieee_value(0d0, ieee_positive_inf)
-    endif
 
 end function euclidean_norm
 
