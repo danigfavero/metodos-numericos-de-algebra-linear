@@ -10,8 +10,7 @@ function dotproduct(n, x, y) result(product)
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
     implicit none
     integer, intent(in) :: n
-    real(dp), intent(in) :: x(n)
-    real(dp), intent(in) :: y(n)
+    real(dp), intent(in) :: x(n), y(n)
     real(dp) :: product
 
     integer :: i
@@ -30,6 +29,7 @@ end function dotproduct
 ! vetor x.
 function euclidean_norm(n, x) result(norm)
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
+    use, intrinsic :: ieee_arithmetic
     implicit none
     integer, intent(in) :: n
     real(dp), intent(in) :: x(n)
@@ -49,6 +49,9 @@ function euclidean_norm(n, x) result(norm)
     enddo
 
     norm = dsqrt(sum(y)) * abs(max)
+    if (isnan(norm)) then
+        norm = ieee_value(0d0, ieee_positive_inf)
+    endif
 
 end function euclidean_norm
 
@@ -59,8 +62,7 @@ end function euclidean_norm
 subroutine matrixvector(n, m, A, x, b)
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
     implicit none
-    integer, intent(in) :: n
-    integer, intent(in) :: m
+    integer, intent(in) :: n, m
     real(dp), intent(in) :: A(n,m)
     real(dp), intent(in) :: x(m)
     real(dp) :: b(n)
@@ -86,16 +88,11 @@ end subroutine matrixvector
 subroutine matrixmatrix(n, m, p, A, X, B)
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
     implicit none
-    integer, intent(in) :: n
-    integer, intent(in) :: m
-    integer, intent(in) :: p
-    real(dp), intent(in) :: A(n,m)
-    real(dp), intent(in) :: X(m,p)
+    integer, intent(in) :: n, m, p
+    real(dp), intent(in) :: A(n,m), X(m,p)
     real(dp) :: B(n,p)
 
-    integer :: i
-    integer :: j
-    integer :: k
+    integer :: i, j, k
 
     do i=1,n
         do j=1,p
@@ -113,8 +110,8 @@ subroutine matrixmatrix(n, m, p, A, X, B)
 
 end subroutine matrixmatrix
 
-! -----------------------------------------------------------------------------
 
+! ------------------------------------TESTES-----------------------------------
 function naive_euclidean_norm(n, x) result(norm)
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
     implicit none
@@ -122,6 +119,7 @@ function naive_euclidean_norm(n, x) result(norm)
     real(dp), intent(in) :: x(n)
     real(dp) :: y(n)
     real(dp) :: norm
+
     integer :: i
 
     do i=1,n
@@ -131,17 +129,17 @@ function naive_euclidean_norm(n, x) result(norm)
 
 end function naive_euclidean_norm
 
+
 subroutine naive_matrixvector(n, m, A, x, b)
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
     implicit none
-    integer, intent(in) :: n
-    integer, intent(in) :: m
+    integer, intent(in) :: n, m
     real(dp), intent(in) :: A(n,m)
     real(dp), intent(in) :: x(m)
     real(dp) :: b(n)
 
-    integer :: i
-    integer :: j
+    integer :: i, j
+
     do i=1,n
         b(i) = 0.0
         do j=1,m
@@ -151,19 +149,15 @@ subroutine naive_matrixvector(n, m, A, x, b)
 
 end subroutine naive_matrixvector
 
+
 subroutine naive_matrixmatrix(n, m, p, A, X, B)
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
     implicit none
-    integer, intent(in) :: n
-    integer, intent(in) :: m
-    integer, intent(in) :: p
-    real(dp), intent(in) :: A(n,m)
-    real(dp), intent(in) :: X(m,p)
+    integer, intent(in) :: n, m, p
+    real(dp), intent(in) :: A(n,m), X(m,p)
     real(dp) :: B(n,p)
 
-    integer :: i
-    integer :: j
-    integer :: k
+    integer :: i, j, k
 
     do i=1,n
         do j=1,m
@@ -180,22 +174,13 @@ end subroutine naive_matrixmatrix
 program ep1
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
     implicit none
-    real(dp), allocatable :: v(:)
-    real(dp) :: naive_euclidean_norm
-    real(dp) :: euclidean_norm
-    real(dp), allocatable :: M(:,:)
-    real(dp), allocatable :: q(:)
-    real(dp), allocatable :: u(:)
-    real(dp), allocatable :: N(:,:)
-    real(dp), allocatable :: O(:,:)
-    integer :: i
-    integer :: j
-    integer :: meunumero
-    real(kind=8)::start,finish
-    integer :: l
+    real(dp) :: naive_euclidean_norm, euclidean_norm
+    real(dp), allocatable :: v(:), q(:), u(:)
+    real(dp), allocatable :: M(:,:), N(:,:), O(:,:)
+    real(kind=8)::start, finish
+    integer :: i, j, l, meunumero
 
     ! TESTE NORMA
-
     allocate(v(10))
     do i=1,4
         do j=1,10
@@ -209,68 +194,68 @@ program ep1
 
     print *, ""
 
-    ! ! TESTE MATRIZ VETOR
-    ! do l=1,4
-    !     meunumero = 2*10**l
-    !     print *, meunumero
-    !     allocate(M(meunumero,meunumero))
-    !     allocate(q(meunumero))
-    !     allocate(u(meunumero))
-    !     do i=1,meunumero
-    !         q(i) = i * 3.1
-    !         do j=1,meunumero
-    !             M(i,j) = i+j * 2.7
-    !         enddo
-    !     enddo
+    ! TESTE MATRIZ VETOR
+    do l=1,4
+        meunumero = 2*10**l
+        print *, meunumero
+        allocate(M(meunumero,meunumero))
+        allocate(q(meunumero))
+        allocate(u(meunumero))
+        do i=1,meunumero
+            q(i) = i * 3.1
+            do j=1,meunumero
+                M(i,j) = i+j * 2.7
+            enddo
+        enddo
 
-    !     call cpu_time(start)
-    !     call matrixvector(meunumero, meunumero, M, q, u)
-    !     call cpu_time(finish)
-    !     print *, "Produto matriz vetor: ", finish-start
+        call cpu_time(start)
+        call matrixvector(meunumero, meunumero, M, q, u)
+        call cpu_time(finish)
+        print *, "Produto matriz vetor: ", finish-start
 
-    !     call cpu_time(start)
-    !     call naive_matrixvector(meunumero, meunumero, M, q, u)
-    !     call cpu_time(finish)
-    !     print *, "Produto matriz vetor naive: ", finish-start
+        call cpu_time(start)
+        call naive_matrixvector(meunumero, meunumero, M, q, u)
+        call cpu_time(finish)
+        print *, "Produto matriz vetor naive: ", finish-start
 
-    !     deallocate(q)
-    !     deallocate(u)
-    !     deallocate(M)
-    !     print *, ""
-    ! enddo
+        deallocate(q)
+        deallocate(u)
+        deallocate(M)
+        print *, ""
+    enddo
 
-    ! ! TESTE MATRIZ MATRIZ
-    ! do l=1,4
-    !     if (l == 4) then
-    !         meunumero = 2*10**(l-1)
-    !     else 
-    !         meunumero = 1*10**l
-    !     endif
+    ! TESTE MATRIZ MATRIZ
+    do l=1,4
+        if (l == 4) then
+            meunumero = 2*10**(l-1)
+        else 
+            meunumero = 1*10**l
+        endif
 
-    !     print *, meunumero
-    !     allocate(M(meunumero,meunumero))
-    !     allocate(N(meunumero,meunumero))
-    !     allocate(O(meunumero,meunumero))
-    !     do i=1,meunumero
-    !         do j=1,meunumero
-    !             M(i,j) = i+j * 3.3
-    !             N(i,j) = i-j * 1.4
-    !         enddo
-    !     enddo
+        print *, meunumero
+        allocate(M(meunumero,meunumero))
+        allocate(N(meunumero,meunumero))
+        allocate(O(meunumero,meunumero))
+        do i=1,meunumero
+            do j=1,meunumero
+                M(i,j) = i+j * 3.3
+                N(i,j) = i-j * 1.4
+            enddo
+        enddo
 
-    !     call cpu_time(start)
-    !     call naive_matrixmatrix(meunumero, meunumero, meunumero, M, N, O)
-    !     call cpu_time(finish)
-    !     print *, "Multiplicação de matrizes naive: ", finish-start
+        call cpu_time(start)
+        call naive_matrixmatrix(meunumero, meunumero, meunumero, M, N, O)
+        call cpu_time(finish)
+        print *, "Multiplicação de matrizes naive: ", finish-start
 
-    !     call cpu_time(start)
-    !     call matrixmatrix(meunumero, meunumero, meunumero, M, N, O)
-    !     call cpu_time(finish)
-    !     print *, "Multiplicação de matrizes: ", finish-start
+        call cpu_time(start)
+        call matrixmatrix(meunumero, meunumero, meunumero, M, N, O)
+        call cpu_time(finish)
+        print *, "Multiplicação de matrizes: ", finish-start
 
-    !     deallocate(M)
-    !     deallocate(N)
-    !     deallocate(O)
-    ! enddo
+        deallocate(M)
+        deallocate(N)
+        deallocate(O)
+    enddo
 
 end program ep1

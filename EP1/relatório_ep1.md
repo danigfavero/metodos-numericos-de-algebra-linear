@@ -30,7 +30,7 @@ Vamos comparar o resultado de duas funções que calculam a norma: `naive_euclid
 | $10^{100}$                    | 3.1622776601683802$\times 10^{100}$ | 3.1622776601683802$\times 10^{100}$ |
 | $10^{200}$                    | Infinity                            | 3.1622776601683807$\times 10^{200}$ |
 | $10^{300}$                    | Infinity                            | 3.1622776601683819$\times 10^{200}$ |
-| $10^{400}$                    | Infinity                            | NaN                                 |
+| $10^{400}$                    | Infinity                            | Infinity                            |
 
 (Por simplicidade, os experimentos foram feitos com vetores de tamanho 10, com todos os elementos iguais)
 
