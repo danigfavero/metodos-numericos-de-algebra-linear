@@ -3,7 +3,9 @@
 
 ## Lista 3 - MAC0300
 
-Daniela Gonzalez Favero - 10277443 - 18/09/2020
+Daniela Gonzalez Favero - 10277443 - 20/09/2020
+
+Exercícios extraídos do livro *"Fundamentals of Matrix Computations" de David S. Watkins (John Wiley & Sons, 1991)*.
 
 **1.2.4**    
 

@@ -5,6 +5,8 @@
 
 Daniela Gonzalez Favero - 10277443 - 04/09/2020
 
+Exercícios extraídos do livro *"Numerical Computing with IEEE Floating Point Arithmetic" de Michael L. Overton (SIAM, Philadelphia, 2001)* .
+
 **4.1**  
 
 | decimal | binário | sinal | expoente | mantissa |  |

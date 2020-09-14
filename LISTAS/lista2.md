@@ -5,6 +5,8 @@
 
 Daniela Gonzalez Favero - 10277443 - 11/09/2020
 
+Exercícios extraídos do livro *"Numerical Computing with IEEE Floating Point Arithmetic" de Michael L. Overton (SIAM, Philadelphia, 2001)* .
+
 **6.4**  
 
 Queremos saber qual é o maior número $x$ tal que $round(1+x) = 1$, portanto precisamos olhar para o tamanho da mantissa (afinal o expoente já estará determinado pelo 1). Para que $x$ não caiba e seja arredondado (pelo *round to nearest*) para 0, é necessário que o dígito 1 apareça somente uma casa depois da última representada.
