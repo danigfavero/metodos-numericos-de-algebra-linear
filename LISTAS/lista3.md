@@ -27,6 +27,7 @@ Portanto não há $y\neq0$ que satisfaça $Ay=0$. $\square$
 ```pseudocode
 k = b1
 while b(k) = 0
+	if g(k,k) = 0, set error flag, exit
 	k ← k + 1
     
 for i=k+1,...,n
