@@ -201,5 +201,89 @@ Que mostra que, por hipótese de indução, provamos que as entradas da diagonal
 
 **1.7.45**
 
-Resposta
+**(a)** Vamos provar que se $L$ e $M$ são matrizes triangulares inferiores, o produto $LM$ também é triangular inferior por indução na dimensão ($n$) da matriz. 
+
+*BASE:* $n=1$.
+$$
+LM = \begin{bmatrix}
+l_{11}
+\end{bmatrix}
+\begin{bmatrix}
+m_{11}
+\end{bmatrix} =
+\begin{bmatrix}
+l_{11}m_{11}
+\end{bmatrix}
+$$
+Ou seja, $LM$ é triangular inferior para $n=1$.
+
+*HIPÓTESE DE INDUÇÃO:* suponha que, para $(n-1) \times (n-1)$, o produto $LM$  é triangular inferior.
+
+Agora tome $L$ e $M$ de dimensão $n \times n$. Podemos particionar as matrizes desta maneira:
+$$
+L =
+\begin{bmatrix}
+L_{n-1} & 0 \\
+a & l_{nn}
+\end{bmatrix},\ \ \ \
+M =
+\begin{bmatrix}
+M_{n-1} & 0 \\
+b & m_{nn}
+\end{bmatrix},
+$$
+tal que $L_{n-1}$ e $M_{n-1}$ são submatrizes de dimensões $(n-1) \times (n-1)$, contendo respectivamente os elementos $l_{ij}$ e $m_{ij}$ com $i,j=1,...,n-1$. Considere também que $a$ e $b$ são vetores tais que $a = l_{nj}$ e $b = m_{nj}$, com  $j=1,...,n-1$. 
+
+Quando multiplicamos as matrizes, obtemos:
+$$
+LM =
+\begin{bmatrix}
+L_{n-1}M_{n-1} & 0 \\
+aM_{n-1} + l_{nn}b & l_{nn}m_{nn}
+\end{bmatrix},\ \ \ \
+$$
+Portanto, por hipótese de indução, provamos que o produto $LM$ é triangular inferior.  $\square$
+
+**(b)** Vamos provar que se $L$ e $M$ são matrizes triangulares inferiores, as entradas da diagonal principal de $LM$ são $l_{11}m_{11},\ ...,\ l_{nn}m_{nn}$  por indução na dimensão ($n$) da matriz. 
+
+*BASE:* $n=1$.
+$$
+LM = \begin{bmatrix}
+l_{11}
+\end{bmatrix}
+\begin{bmatrix}
+m_{11}
+\end{bmatrix} =
+\begin{bmatrix}
+l_{11}m_{11}
+\end{bmatrix}
+$$
+Ou seja, a entrada da diagonal principal de $LM$ é  $l_{11}$  para $n=1$. 
+
+*HIPÓTESE DE INDUÇÃO:* suponha que, para $(n-1) \times (n-1)$, as entradas da diagonal principal de $LM$ são $l_{11}m_{11},\ ...,\ l_{n-1,n-1}m_{n-1,n-1}$
+
+Agora tome $L$ e $M$ de dimensão $n \times n$. Podemos particionar as matrizes desta maneira:
+$$
+L =
+\begin{bmatrix}
+L_{n-1} & 0 \\
+a & l_{nn}
+\end{bmatrix},\ \ \ \
+M =
+\begin{bmatrix}
+M_{n-1} & 0 \\
+b & m_{nn}
+\end{bmatrix},
+$$
+tal que $L_{n-1}$ e $M_{n-1}$ são submatrizes de dimensões $(n-1) \times (n-1)$, contendo respectivamente os elementos $l_{ij}$ e $m_{ij}$ com $i,j=1,...,n-1$. Considere também que $a$ e $b$ são vetores tais que $a = l_{nj}$ e $b = m_{nj}$, com  $j=1,...,n-1$. 
+
+Quando multiplicamos as matrizes, obtemos:
+$$
+LM =
+\begin{bmatrix}
+L_{n-1}M_{n-1} & 0 \\
+aM_{n-1} + l_{nn}b & l_{nn}m_{nn}
+\end{bmatrix},\ \ \ \
+$$
+Portanto, por hipótese de indução, provamos que as entradas da diagonal principal de $LM$ são $l_{11}m_{11},\ ...,\ l_{nn}m_{nn}$. $\square$
 
