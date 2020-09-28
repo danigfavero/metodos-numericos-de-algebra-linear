@@ -1,0 +1,65 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{dmasproject}
+\usepackage{multirow}
+
+
+\title{Exercício Programa 2 - Resolução de sistemas de equações lineares}
+
+\author{
+  Daniela Gonzalez Favero - 10277443
+}
+\date{11 de Outubro de 2020}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Primeira parte:  sistemas definidos positivos}
+
+Tabela:
+
+\begin{table}[h]
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multirow{3}{*}{\textbf{PROBLEMA}} & \multicolumn{6}{c|}{\textbf{DECOMPOSIÇÃO DE CHOLESKY}}                                             \\ \cline{2-7} 
+                                   & \multicolumn{3}{c|}{\textbf{ORIENTADA A LINHA}} & \multicolumn{3}{c|}{\textbf{ORIENTADA A COLUNA}} \\ \cline{2-7} 
+                                   & \textbf{$A=GG^T$}      & \textbf{$Gy=b$}      & \textbf{$G^Tx=y$}     & \textbf{$A=GG^T$}      & \textbf{$Gy=b$}      & \textbf{$G^Tx=y$}      \\ \hline
+\textbf{1}                         &  0              &  0              &  0             &  0              &   0             &      0          \\ \hline
+\textbf{2}                         &   0             &     0           &  0             &    0            &     0           &       0         \\ \hline
+\textbf{3}                         &           0     &         0       &        0       &       0         &       0         &       0         \\ \hline
+\textbf{4}                         &         0       &        0        &      0         &        0        &       0         &      0          \\ \hline
+\textbf{5}                         &        0        &      0          &        0       &         0       &        0        &      0          \\ \hline
+\textbf{6}                         &         0       &       0         &         0      &     0           &       0         &      0          \\ \hline
+\textbf{7}                         &         0       &         0       &         0      &      0          &         0       &       0         \\ \hline
+\end{tabular}
+\end{table}
+
+Comentário sobre a tabela.
+
+
+\section{Segunda parte:  sistemas gerais}
+
+Tabela:
+
+% Please add the following required packages to your document preamble:
+% \usepackage{multirow}
+\begin{table}[h]
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multirow{3}{*}{\textbf{PROBLEMA}} & \multicolumn{4}{c|}{\textbf{DECOMPOSIÇÃO DE CHOLESKY}}                                             \\ \cline{2-5} 
+                                   & \multicolumn{2}{c|}{\textbf{ORIENTADA A LINHA}} & \multicolumn{2}{c|}{\textbf{ORIENTADA A COLUNA}} \\ \cline{2-5} 
+                                   & \textbf{$PA=LU$}         & \textbf{$LUx=Pb$}        & \textbf{$PA=LU$}         & \textbf{$LUx=Pb$}         \\ \hline
+\textbf{1}                         & 0                      & 0                      & 0                      & 0                       \\ \hline
+\textbf{2}                         & 0                      & 0                      & 0                      & 0                       \\ \hline
+\textbf{3}                         & 0                      & 0                      & 0                      & 0                       \\ \hline
+\textbf{4}                         & 0                      & 0                      & 0                      & 0                       \\ \hline
+\textbf{5}                         & 0                      & 0                      & 0                      & 0                       \\ \hline
+\textbf{6}                         & 0                      & 0                      & 0                      & 0                       \\ \hline
+\textbf{7}                         & 0                      & 0                      & 0                      & 0                       \\ \hline
+\end{tabular}
+\end{table}
+
+Comentário sobre a tabela.
+
+\end{document}
