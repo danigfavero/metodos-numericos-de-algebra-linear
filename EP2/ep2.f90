@@ -3,17 +3,18 @@
 ! Exercício Programa 2 - Resolu̧cão de sistemas de equações lineares
 
 !--------------------- 1 - SISTEMAS DEFINIDOS POSITIVOS ---------------------!
-!-----------------------  FUNÇÕES ORIENTADAS A COLUNA -----------------------!
+!------------------------ FUNÇÕES ORIENTADAS A COLUNA ------------------------!
 
 ! Recebe um inteiro n e uma matriz A (nXn) e devolve, na parte triangular
 ! inferior da própria A, o fator de Cholesky G. Devolve 0 se G foi calculada
 ! com sucesso e -1 se a matriz A não for definida positiva.
 function cholcol(n, A) result(sucesso)
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
+    use, intrinsic :: ieee_arithmetic
     implicit none
     integer, intent(in) :: n
     real(dp) :: A(n,n)
-    integer :: sucesso
+    integer :: sucesso, i, k, j
 
     sucesso = -1
 
@@ -51,19 +52,38 @@ function backcol(n, A, b, trans) result(sucesso)
 
 end function backcol
 
-!------------------------  FUNÇÕES ORIENTADAS A LINHA ------------------------!
+!------------------------- FUNÇÕES ORIENTADAS A LINHA -------------------------!
 
 ! Recebe um inteiro n e uma matriz A (nXn) e devolve, na parte triangular
 ! inferior da própria A, o fator de Cholesky G. Devolve 0 se G foi calculada
 ! com sucesso e -1 se a matriz A não for definida positiva.
 function cholrow(n, A) result(sucesso)
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
+    use, intrinsic :: ieee_arithmetic
     implicit none
     integer, intent(in) :: n
     real(dp) :: A(n,n)
-    integer :: sucesso
+    integer :: sucesso, i, j, k
 
-    sucesso = -1
+    sucesso = 0
+    do i=1,n
+        do k=1,i-1
+            A(i,i) = A(i,i) - A(i,k)**2
+        enddo
+
+        if (A(i,i) <= 0) then
+            sucesso = -1
+            exit
+        endif
+
+        A(i,i) = dsqrt(A(i,i))
+        do j=i+1,n
+            do k=1,i-1
+                A(j,i) = A(j,i) - A(i,k)*A(j,k)
+            enddo
+            A(j,i) = A(j,i)/A(i,i)
+        enddo
+    enddo
 
 end function cholrow
 
@@ -99,8 +119,8 @@ function backrow(n, A, b, trans) result(sucesso)
 
 end function backrow
 
-!--------------------------- 2 -  SISTEMAS GERAIS ---------------------------!
-!-----------------------  FUNÇÕES ORIENTADAS A COLUNA -----------------------!
+!---------------------------- 2 - SISTEMAS GERAIS ----------------------------!
+!------------------------ FUNÇÕES ORIENTADAS A COLUNA ------------------------!
 
 ! Recebe um inteiro n e uma matriz A (nXn) e devolve, na própria A, as matrizes
 ! L e U da decomposição LU da matriz P A, onde P é a matriz de permutação
@@ -135,7 +155,7 @@ function sscol(n, A, p, b) result(sucesso)
 end function sscol
 
 
-!------------------------  FUNÇÕES ORIENTADAS A LINHA ------------------------!
+!------------------------ FUNÇÕES ORIENTADAS A LINHA ------------------------!
 
 ! Recebe um inteiro n e uma matriz A (nXn) e devolve, na própria A, as matrizes
 ! L e U da decomposição LU da matriz P A, onde P é a matriz de permutação
@@ -174,9 +194,12 @@ end function ssrow
 program ep2
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
     implicit none
-    integer :: n, k, i, j
+    integer :: n, k, i, j, sucesso
+    integer :: cholcol, forwcol, backcol, cholrow, forwrow, backrow
+    integer :: lucol, sscol, lurow, ssrow
     real(dp) :: a
-    real(dp), allocatable :: M(:,:), x(:)
+    real(dp), allocatable :: M(:,:), x(:), p(:)
+    real(kind=8)::start, finish
     
     read (*,*) n
 
@@ -200,7 +223,62 @@ program ep2
         endif
     enddo
 
+    allocate(p(n))
+
+    ! 1. SISTEMAS DEFINIDOS POSITIVOS
+    call cpu_time(start)
+    sucesso = cholcol(n, M)
+    call cpu_time(finish)
+    print *, "cholcol (", sucesso, "), duração: ", finish-start
+
+    call cpu_time(start)
+    sucesso = forwcol(n, M, x)
+    call cpu_time(finish)
+    print *, "forwcol (", sucesso, "), duração: ", finish-start
+
+    call cpu_time(start)
+    sucesso = backcol(n, M, x, 0)
+    call cpu_time(finish)
+    print *, "backcol (", sucesso, "), duração: ", finish-start
+
+    call cpu_time(start)
+    sucesso = cholrow(n, M)
+    call cpu_time(finish)
+    print *, "cholrow (", sucesso, "), duração: ", finish-start
+
+    call cpu_time(start)
+    sucesso = forwrow(n, M, x)
+    call cpu_time(finish)
+    print *, "forwrow (", sucesso, "), duração: ", finish-start
+
+    call cpu_time(start)
+    sucesso = backrow(n, M, x, 0)
+    call cpu_time(finish)
+    print *, "backrow (", sucesso, "), duração: ", finish-start
+
+    ! 2. SISTEMAS GERAIS
+    call cpu_time(start)
+    sucesso = lucol(n, M, p)
+    call cpu_time(finish)
+    print *, "lucol (", sucesso, "), duração: ", finish-start
+
+    call cpu_time(start)
+    sucesso = sscol(n, M, p, x)
+    call cpu_time(finish)
+    print *, "sscol (", sucesso, "), duração: ", finish-start
+
+    call cpu_time(start)
+    sucesso = lurow(n, M, p)
+    call cpu_time(finish)
+    print *, "lurow (", sucesso, "), duração: ", finish-start
+
+    call cpu_time(start)
+    sucesso = ssrow(n, M, p, x)
+    call cpu_time(finish)
+    print *, "ssrow (", sucesso, "), duração: ", finish-start
+
     deallocate(M)
     deallocate(x)
+    deallocate(p)
 
 end program ep2
