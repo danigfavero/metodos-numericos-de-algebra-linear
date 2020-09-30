@@ -43,9 +43,21 @@ function forwcol(n, A, b) result(sucesso)
     integer, intent(in) :: n
     real(dp), intent(in) :: A(n,n)
     real(dp):: b(n)
-    integer :: sucesso
+    integer :: sucesso, j, i
 
-    sucesso = -1
+    sucesso = 0
+    do j=1,n
+        if (A(j,j) == 0) then
+            sucesso = -1
+            exit
+        endif
+
+        b(j) =  b(j)/A(j,j)
+
+        do i=j+1,n
+            b(i) = b(i) - A(i,j)*b(j)
+        enddo 
+    enddo
 
 end function forwcol
 
@@ -110,9 +122,21 @@ function forwrow(n, A, b) result(sucesso)
     integer, intent(in) :: n
     real(dp), intent(in) :: A(n,n)
     real(dp):: b(n)
-    integer :: sucesso
+    integer :: sucesso, i, j
 
-    sucesso = -1
+    sucesso = 0
+    do i=1,n
+        do j=1,i-1
+            b(i) = b(i) - A(i,j)*b(j)
+        enddo 
+
+        if (A(i,i) == 0) then
+            sucesso = -1
+            exit
+        endif
+
+        b(i) =  b(i)/A(i,i)
+    enddo
 
 end function forwrow
 
