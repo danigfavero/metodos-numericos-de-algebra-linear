@@ -16,7 +16,20 @@ function cholcol(n, A) result(sucesso)
     real(dp) :: A(n,n)
     integer :: sucesso, i, k, j
 
-    sucesso = -1
+    sucesso = 0
+    do i=1,n
+        if (A(i,i) <= 0) then
+            sucesso = -1
+            exit
+        endif
+
+        A(i,i) = dsqrt(A(i,i))
+        do j=i+1,n
+            do k=j,i-1
+                A(k,j) = A(k,j) - A(j,i)*A(k,i)
+            enddo
+        enddo
+    enddo
 
 end function cholcol
 
