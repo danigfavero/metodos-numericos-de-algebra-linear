@@ -14,19 +14,19 @@ function cholcol(n, A) result(sucesso)
     implicit none
     integer, intent(in) :: n
     real(dp) :: A(n,n)
-    integer :: sucesso, i, k, j
+    integer :: sucesso, j, k, i
 
     sucesso = 0
-    do i=1,n
-        if (A(i,i) <= 0) then
+    do j=1,n
+        if (A(j,j) <= 0) then
             sucesso = -1
             exit
         endif
 
-        A(i,i) = dsqrt(A(i,i))
-        do j=i+1,n
-            do k=j,i-1
-                A(k,j) = A(k,j) - A(j,i)*A(k,i)
+        A(j,j) = dsqrt(A(j,j))
+        do i=j+1,n
+            do k=i,j-1
+                A(k,i) = A(k,i) - A(i,j)*A(k,j)
             enddo
         enddo
     enddo
@@ -71,9 +71,26 @@ function backcol(n, A, b, trans) result(sucesso)
     integer, intent(in) :: n, trans
     real(dp), intent(in) :: A(n,n)
     real(dp):: b(n)
-    integer :: sucesso
+    integer :: sucesso, j, i
 
-    sucesso = -1
+    sucesso = 0
+    if (trans == 0) then
+        do j=1,n
+            if (A(j,j) == 0) then
+                sucesso = -1
+                exit
+            endif
+    
+            b(j) =  b(j)/A(j,j)
+    
+            do i=n,j+1,-1
+                b(i) = b(i) - A(i,j)*b(j)
+            enddo 
+        enddo
+        
+    else
+        ! TO-DO
+    endif
 
 end function backcol
 
@@ -150,9 +167,26 @@ function backrow(n, A, b, trans) result(sucesso)
     integer, intent(in) :: n, trans
     real(dp), intent(in) :: A(n,n)
     real(dp):: b(n)
-    integer :: sucesso
+    integer :: sucesso, i, j
 
-    sucesso = -1
+    sucesso = 0
+    if (trans == 0) then
+        do i=n,1,-1
+            do j=1,i-1
+                b(i) = b(i) - A(i,j)*b(j)
+            enddo
+
+            if (A(i,i) == 0) then
+                sucesso = -1
+                exit
+            endif
+
+            b(i) = b(i)/A(i,i)
+        enddo
+
+    else
+        ! TO-DO
+    endif
 
 end function backrow
 
