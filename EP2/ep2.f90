@@ -202,8 +202,8 @@ function lucol(n, A, p) result(sucesso)
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
     implicit none
     integer, intent(in) :: n
-    real(dp) :: A(n,n), p(n)
-    integer :: sucesso
+    real(dp) :: A(n,n), max, aux
+    integer :: p(n), sucesso, i, j, k, m
 
     sucesso = -1
 
@@ -217,11 +217,21 @@ function sscol(n, A, p, b) result(sucesso)
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
     implicit none
     integer, intent(in) :: n
-    real(dp), intent(in) :: A(n,n), p(n)
-    real(dp) :: b(n)
-    integer :: sucesso
+    real(dp) :: A(n,n), b(n), aux
+    integer :: p(n), sucesso, i, backcol, forwcol
 
-    sucesso = -1
+    do i=1,n
+        if (p(i) /= 0) then
+            aux = b(i)
+            b(i) = b(p(i))
+            b(p(i)) = aux
+        endif
+    enddo
+
+    sucesso = backcol(n, A, b, 0) + forwcol(n, A, b)
+    if (sucesso < 0) then
+        sucesso = -1
+    endif
 
 end function sscol
 
@@ -237,8 +247,8 @@ function lurow(n, A, p) result(sucesso)
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
     implicit none
     integer, intent(in) :: n
-    real(dp) :: A(n,n), p(n)
-    integer :: sucesso
+    real(dp) :: A(n,n), max, aux
+    integer :: p(n), sucesso, j, i, k, m
 
     sucesso = -1
 
@@ -252,11 +262,21 @@ function ssrow(n, A, p, b) result(sucesso)
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
     implicit none
     integer, intent(in) :: n
-    real(dp), intent(in) :: A(n,n), p(n)
-    real(dp) :: b(n)
-    integer :: sucesso
+    real(dp) :: A(n,n), b(n), aux
+    integer :: p(n), i, sucesso, backrow, forwrow
 
-    sucesso = -1
+    do i=1,n
+        if (p(i) /= 0) then
+            aux = b(i)
+            b(i) = b(p(i))
+            b(p(i)) = aux
+        endif
+    enddo
+
+    sucesso = backrow(n, A, b, 0) + forwrow(n, A, b)
+    if (sucesso < 0) then
+        sucesso = -1
+    endif
 
 end function ssrow
 
