@@ -218,7 +218,7 @@ function sscol(n, A, p, b) result(sucesso)
     implicit none
     integer, intent(in) :: n
     real(dp) :: A(n,n), b(n), aux
-    integer :: p(n), sucesso, i, backcol, forwcol
+    integer :: p(n), sucesso, i, j, backcol, forwcol
 
     do i=1,n
         if (p(i) /= 0) then
@@ -226,6 +226,12 @@ function sscol(n, A, p, b) result(sucesso)
             b(i) = b(p(i))
             b(p(i)) = aux
         endif
+    enddo
+
+    do i=1,n
+        do j=1,i-1
+            b(i) = b(i) - A(i,j)*b(j)
+        enddo
     enddo
 
     sucesso = backcol(n, A, b, 0) + forwcol(n, A, b)
@@ -250,7 +256,38 @@ function lurow(n, A, p) result(sucesso)
     real(dp) :: A(n,n), max, aux
     integer :: p(n), sucesso, j, i, k, m
 
-    sucesso = -1
+    sucesso = 0
+    do j=1,n
+        if (A(j,j) == 0) then
+            m = j
+            max = 0
+            do i=j+1,n
+                if (abs(A(i,j)) > max) then
+                    max = abs(A(i,j))
+                    m = i
+                endif
+            enddo
+
+            if (max == 0) then
+                sucesso = -1
+                exit
+            endif
+            
+            p(k) = m
+            do k=1,n
+                aux = A(j,k)
+                A(j,k) = A(j,m)
+                A(j,m) = aux
+            enddo
+        endif
+
+        do i=j+1,n
+            A(i,j) = A(i,j)/A(j,j)
+            do k=j+1,n
+                A(i,k) = A(i,k) - A(i,j)*A(j,j)
+            enddo
+        enddo
+    enddo
 
 end function lurow
 
@@ -263,7 +300,7 @@ function ssrow(n, A, p, b) result(sucesso)
     implicit none
     integer, intent(in) :: n
     real(dp) :: A(n,n), b(n), aux
-    integer :: p(n), i, sucesso, backrow, forwrow
+    integer :: p(n), i, j, sucesso, backrow, forwrow
 
     do i=1,n
         if (p(i) /= 0) then
@@ -271,6 +308,12 @@ function ssrow(n, A, p, b) result(sucesso)
             b(i) = b(p(i))
             b(p(i)) = aux
         endif
+    enddo
+
+    do j=1,n
+        do i=j+1,n
+            b(i) = b(i) - A(i,j)*b(j)
+        enddo
     enddo
 
     sucesso = backrow(n, A, b, 0) + forwrow(n, A, b)
