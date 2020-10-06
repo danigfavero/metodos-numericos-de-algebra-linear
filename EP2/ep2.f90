@@ -71,7 +71,7 @@ function backcol(n, A, b, trans) result(sucesso)
     integer, intent(in) :: n, trans
     real(dp), intent(in) :: A(n,n)
     real(dp):: b(n)
-    integer :: sucesso, j, i
+    integer :: sucesso, j, i, forwcol
 
     sucesso = 0
     if (trans == 0) then
@@ -89,7 +89,7 @@ function backcol(n, A, b, trans) result(sucesso)
         enddo
         
     else
-        ! TO-DO
+        sucesso = forwcol(n, A, b)
     endif
 
 end function backcol
@@ -167,7 +167,7 @@ function backrow(n, A, b, trans) result(sucesso)
     integer, intent(in) :: n, trans
     real(dp), intent(in) :: A(n,n)
     real(dp):: b(n)
-    integer :: sucesso, i, j
+    integer :: sucesso, i, j, forwrow
 
     sucesso = 0
     if (trans == 0) then
@@ -185,7 +185,7 @@ function backrow(n, A, b, trans) result(sucesso)
         enddo
 
     else
-        ! TO-DO
+        sucesso = forwrow(n, A, b)
     endif
 
 end function backrow
