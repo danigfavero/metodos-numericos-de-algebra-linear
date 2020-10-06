@@ -8,17 +8,17 @@
 
 //  for (i=0; i<n; i++)
 //    for (j=0; j<n; j++)
-//      fprintf(fp,"\n%3d %3d % .20e",i,j,A[i][j]);
+//      fprintf(fp,"\n%3d %3d % .20e",i,j,M[i][j]);
 
 // por
 
 //  for (i=0; i<n; i++)
 //    if (i==n/2)
 //      for (j=0; j<n; j++)
-//        fprintf(fp,"\n%3d %3d % .20e",i,j,A[0][j]);
+//        fprintf(fp,"\n%3d %3d % .20e",i,j,M[0][j]);
 //    else
 //      for (j=0; j<n; j++)
-//        fprintf(fp,"\n%3d %3d % .20e",i,j,A[i][j]);
+//        fprintf(fp,"\n%3d %3d % .20e",i,j,M[i][j]);
 
 // e para gerar o arquivo a9.dat troque o "n/2" por "n-1".
 // Em ambos casos escolha n=700. O que estara fazendo sera gerar
