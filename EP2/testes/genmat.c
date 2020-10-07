@@ -1,10 +1,10 @@
 // Gerador de sistemas de equacoes lineares Ax=b de dimensao n
 // com solucao x tal que x_i = 1+i%(n/100), i=0, ..., n-1.
 
-// Para gerar as os arquivos a1.dat, a2.dat, ..., a7.dat escolha
+// Para gerar as os arquivos m1.dat, m2.dat, ..., m7.dat escolha
 // esses nomes com dimensoes 100, 200, ..., 700, respectivamente.
 
-// Para gerar o arquivo a8.dat subsitua o laco
+// Para gerar o arquivo m8.dat subsitua o laco
 
 //  for (i=0; i<n; i++)
 //    for (j=0; j<n; j++)
@@ -20,7 +20,7 @@
 //      for (j=0; j<n; j++)
 //        fprintf(fp,"\n%3d %3d % .20e",i,j,M[i][j]);
 
-// e para gerar o arquivo a9.dat troque o "n/2" por "n-1".
+// e para gerar o arquivo m9.dat troque o "n/2" por "n-1".
 // Em ambos casos escolha n=700. O que estara fazendo sera gerar
 // matrizes cujas linhas n/2 e n-1, respectivamente, serao copia
 // da linha 0, i.e., matrizes singulares.
