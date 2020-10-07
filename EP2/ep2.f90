@@ -223,7 +223,7 @@ function lucol(n, A, p) result(sucesso)
             endif
             
             p(j) = m
-            do k=1,n ! orientado a linha -> como fazer a coluna?
+            do k=1,n
                 aux = A(j,k)
                 A(j,k) = A(j,m)
                 A(j,m) = aux
@@ -253,7 +253,6 @@ function sscol(n, A, p, b) result(sucesso)
     integer, intent(in) :: n
     real(dp) :: A(n,n), b(n), aux
     integer :: p(n), sucesso, i, j, backcol
-
     do i=1,n
         if (p(i) /= 0) then
             aux = b(i)
@@ -292,7 +291,7 @@ function lurow(n, A, p) result(sucesso)
         if (A(j,j) == 0) then
             m = j
             max = 0
-            do i=j+1,n ! orientado a coluna -> tem como fazer a linha?
+            do i=j+1,n
                 if (abs(A(i,j)) > max) then
                     max = abs(A(i,j))
                     m = i
@@ -369,25 +368,25 @@ program ep2
     allocate(M(n,n))
     do k=1,n*n
         read (*,*) i, j, a
-        if (i < 1 .or. j < 1 .or. i > n .or. j > n) then
+        if (i < 0 .or. j < 0 .or. i > n-1 .or. j > n-1) then
             print *, "ERROR: Index out of bound"
         else
-            M(i,j) = a
+            M(i+1,j+1) = a
         endif
     enddo
 
     allocate(x(n))
     do k=1,n
         read (*,*) i, a
-        if (i < 1 .or. i > n) then
+        if (i < 0 .or. i > n-1) then
             print *, "ERROR: Index out of bound"
         else
-            x(i) = a
+            x(i+1) = a
         endif
     enddo
 
     allocate(p(n))
-
+    p = 0
     ! 1. SISTEMAS DEFINIDOS POSITIVOS
     call cpu_time(start)
     sucesso = cholcol(n, M)
@@ -400,7 +399,7 @@ program ep2
     print *, "forwcol (", sucesso, "), duração: ", finish-start
 
     call cpu_time(start)
-    sucesso = backcol(n, M, x, 0)
+    sucesso = backcol(n, M, x, 1)
     call cpu_time(finish)
     print *, "backcol (", sucesso, "), duração: ", finish-start
 
@@ -415,7 +414,7 @@ program ep2
     print *, "forwrow (", sucesso, "), duração: ", finish-start
 
     call cpu_time(start)
-    sucesso = backrow(n, M, x, 0)
+    sucesso = backrow(n, M, x, 1)
     call cpu_time(finish)
     print *, "backrow (", sucesso, "), duração: ", finish-start
 
