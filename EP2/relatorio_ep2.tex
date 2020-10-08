@@ -1,4 +1,11 @@
 \documentclass[a4paper,11pt]{article}
+\setlength{\topmargin}{-.5in}
+\setlength{\textheight}{5in}
+\setlength{\textwidth}{6.3in}
+\setlength{\oddsidemargin}{-.125in}
+\setlength{\evensidemargin}{-.125in}
+\newcommand\tab[1][.5cm]{\hspace*{#1}}
+
 \usepackage[T1]{fontenc}
 \usepackage[portuguese]{babel}
 \usepackage{csquotes}
@@ -23,9 +30,10 @@
 \maketitle
 
 
-\section{Primeira parte:  sistemas definidos positivos}
+\section*{Primeira parte:  sistemas definidos positivos}
 
-Tabela:
+\tab A tabela abaixo apresenta o tempo em segundos para a execução das funções referentes à resolução de sistemas definidos positivos. Os problemas são de decomposição de Cholesky, primeiro orientados a linha: \texttt{cholrow} ($A=GG^T$), \texttt{forwrow} ($Gy=b$) e \texttt{backrow} ($G^Tx=y$); depois orientados a coluna: \texttt{cholcol} ($A=GG^T$), \texttt{forwcol} ($Gy=b$) e \texttt{backcol} ($G^Tx=y$).\\
+\tab Os testes de 1 a 7 contêm matrizes $A$ não singulares de tamanho $(i \times 10^2) \times (i \times 10^2)$, sendo $i$ o número do teste. Os testes 8 e 9 contêm matrizes $A$ singulares de tamanho $(7 \times 10^2) \times (7 \times 10^2)$. Todos os testes também contêm um vetor $b$ de tamanho igual à dimensão de $A$. \\
 
 \begin{table}[h]
 \begin{tabular}{|c|c|c|c|c|c|c|}
@@ -44,13 +52,16 @@ Tabela:
 \textbf{9}                         & $2.07\times10^{-1}$ & $1.2\times10^{-3}$ & $1.12\times10^{-3}$ & $4.63\times10^{-4}$ & $6.45\times10^{-4}$ & $7.54\times10^{-5}$  \\ \hline
 \end{tabular}
 \end{table}
+\\
+Como foi utilizada a linguagem de programação \texttt{Fortran}, é possível notar que na implementação orientada a coluna do Cholesky, o crescimento do consumo de tempo é proporcional a $n^3$; enquanto que na versão orientada a linha, quando a entrada dobra, o consumo de tempo chega a ser multiplicado por 10. O mesmo ocorre com a eliminação gaussiana, que parece quadrático na medição de tempo orientada a coluna, mas perde essa propriedade na implementação orientada a linhas. \\ 
+\tab Além do crescimento desproporcional, também é possível notar que só de percorrer a matriz por colunas, cada problema isolado já demonstra maior eficiência. \\ 
+\tab Por fim, é interessante ver que quando a matriz é singular, o algoritmo é mais rápido pois imediatamente ao notar que um elemento da diagonal é 0, a execução termina. \\
 
-Comentário sobre a tabela.
 
+\section*{Segunda parte:  sistemas gerais}
 
-\section{Segunda parte:  sistemas gerais}
-
-Tabela:
+\tab A tabela abaixo apresenta o tempo em segundos para a execução das funções referentes à resolução de sistemas gerais. Os problemas são de decomposição de LU, primeiro orientados a linha: \texttt{lurow} ($PA=LU$) e \texttt{ssrow} ($LUx=Pb$); depois orientados a coluna: \texttt{lucol} ($PA=LU$) e \texttt{sscol} ($LUx=Pb$).\\
+\tab Os testes de 1 a 7 contêm matrizes $A$ não singulares de tamanho $(i \times 10^2) \times (i \times 10^2)$, sendo $i$ o número do teste. Os testes 8 e 9 contêm matrizes $A$ singulares de tamanho $(7 \times 10^2) \times (7 \times 10^2)$. Todos os testes também contêm um vetor $b$ de tamanho igual à dimensão de $A$. \\
 
 \begin{table}[h]
 \begin{tabular}{|c|c|c|c|c|}
@@ -58,18 +69,20 @@ Tabela:
 \multirow{3}{*}{\textbf{PROBLEMA}} & \multicolumn{4}{c|}{\textbf{DECOMPOSIÇÃO LU}}                                             \\ \cline{2-5} 
                                    & \multicolumn{2}{c|}{\textbf{ORIENTADA A LINHA}} & \multicolumn{2}{c|}{\textbf{ORIENTADA A COLUNA}} \\ \cline{2-5} 
                                    & \textbf{$PA=LU$}         & \textbf{$LUx=Pb$}        & \textbf{$PA=LU$}         & \textbf{$LUx=Pb$}         \\ \hline
-\textbf{1}                         & $1.10\times10^{-3}$ &  $0$  & $1.11\times10^{-3}$ &  $0$   \\ \hline
-\textbf{2}                         & $1.04\times10^{-2}$ &  $0$  & $9.21\times10^{-3}$ &  $0$   \\ \hline
-\textbf{3}                         & $3.06\times10^{-2}$ &  $0$  & $3.01\times10^{-2}$ &  $0$   \\ \hline
-\textbf{4}                         & $7.75\times10^{-2}$ &  $0$  & $6.98\times10^{-2}$ &  $0$   \\ \hline
-\textbf{5}                         & $1.44\times10^{-1}$ &  $0$  & $1.40\times10^{-1}$ &  $0$   \\ \hline
-\textbf{6}                         & $2.47\times10^{-1}$ &  $0$  & $2.35\times10^{-1}$ &  $0$   \\ \hline
-\textbf{7}                         & $4.02\times10^{-1}$ &  $0$  & $3.76\times10^{-1}$ &  $0$   \\ \hline
-\textbf{8}                         & $4.03\times10^{-1}$ &  $0$  & $3.76\times10^{-1}$ &  $0$   \\ \hline
-\textbf{9}                         & $4.04\times10^{-1}$ &  $0$  & $3.80\times10^{-1}$ &  $0$   \\ \hline
+\textbf{1}                         & $1.10\times10^{-3}$ &  $5.40\times10^{-5}$  & $1.11\times10^{-3}$ &  $5.40\times10^{-5}$   \\ \hline
+\textbf{2}                         & $1.04\times10^{-2}$ &  $1.00\times10^{-4}$  & $9.21\times10^{-3}$ &  $1.14\times10^{-4}$   \\ \hline
+\textbf{3}                         & $3.06\times10^{-2}$ &  $3.30\times10^{-4}$  & $3.01\times10^{-2}$ &  $2.34\times10^{-4}$   \\ \hline
+\textbf{4}                         & $7.75\times10^{-2}$ &  $4.31\times10^{-4}$  & $6.98\times10^{-2}$ &  $4.47\times10^{-3}$   \\ \hline
+\textbf{5}                         & $1.44\times10^{-1}$ &  $7.36\times10^{-4}$  & $1.40\times10^{-1}$ &  $1.07\times10^{-3}$   \\ \hline
+\textbf{6}                         & $2.47\times10^{-1}$ &  $1.01\times10^{-3}$  & $2.35\times10^{-1}$ &  $1.24\times10^{-3}$   \\ \hline
+\textbf{7}                         & $4.02\times10^{-1}$ &  $1.67\times10^{-3}$  & $3.76\times10^{-1}$ &  $2.14\times10^{-3}$   \\ \hline
+\textbf{8}                         & $4.03\times10^{-1}$ &  $1.65\times10^{-3}$  & $3.76\times10^{-1}$ &  $2.03\times10^{-3}$   \\ \hline
+\textbf{9}                         & $4.04\times10^{-1}$ &  $1.84\times10^{-3}$  & $3.80\times10^{-1}$ &  $2.41\times10^{-3}$   \\ \hline
 \end{tabular}
 \end{table}
-
-Comentário sobre a tabela.
+\\
+As observações quanto ao tempo consumido por essas funções são bem similares às anteriores. Tanto a  decomposição $LU$ que demonstra crescimento $n^3$, quanto a resolução dos sistemas em \texttt{sscol}, de crescimento de $n^2$; orientadas a coluna, obedecem a teoria de custo de flops. \\
+\tab Já utilizando as implementações orientadas a linha, as funções consomem muito mais tempo conforme as dimensões da matriz aumentam, evidenciando a maneira como o compilador \texttt{Fortran} traz blocos de memória para o cache. \\
+\tab Novamente, quando a matriz é singular, o algoritmo é mais rápido; detectando que é singular \textit{"on the fly"} e já parando a execução. 
 
 \end{document}
