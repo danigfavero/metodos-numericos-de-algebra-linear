@@ -18,6 +18,12 @@ function cholcol(n, A) result(sucesso)
 
     sucesso = 0
     do j=1,n
+        do k=1,j-1
+            do i=j,n
+                A(i,j) = A(i,j) - A(i,k)*A(j,k)
+            enddo
+        enddo
+
         if (A(j,j) <= 0) then
             sucesso = -1
             exit
@@ -25,9 +31,7 @@ function cholcol(n, A) result(sucesso)
 
         A(j,j) = dsqrt(A(j,j))
         do i=j+1,n
-            do k=i,j-1
-                A(k,i) = A(k,i) - A(i,j)*A(k,j)
-            enddo
+            A(i,j) = A(i,j)/A(j,j)
         enddo
     enddo
 
