@@ -3,7 +3,7 @@
 
 ## Lista 5 - MAC0300
 
-Daniela Gonzalez Favero - 10277443 - 30/09/2020
+Daniela Gonzalez Favero - 10277443 - 12/10/2020
 
 Exercícios extraídos do livro *"Fundamentals of Matrix Computations" - David S. Watkins (John Wiley & Sons, 1991)*.
 
@@ -51,10 +51,16 @@ $$
 $$
 Pelo *Teorema 2.1.29*:
 $$
-\kappa_{\infin}(A) = \|A\|_{\infin}\|A^{-1}\|_{\infin} = \max_{1 \leq i \leq 2} \sum^2_{j=1} |a_{ij}|\times \max_{1 \leq i \leq 2} \sum^2_{j=1} |a^{-1}_{ij}| \\
-= \max \{375 + 374, 752 + 750\} \times \max \{375 + 182, 376 + \frac{375}{2}\} \\
+\kappa_{\infin}(A) = \|A\|_{\infin}\|A^{-1}\|_{\infin} = \max_{1 \leq i \leq 2} \sum^2_{j=1} |a_{ij}|\times \max_{1 \leq i \leq 2} \sum^2_{j=1} |a^{-1}_{ij}| 
+$$
+$$
+= \max \{375 + 374, 752 + 750\} \times \max \{375 + 182, 376 + \frac{375}{2}\} 
+$$
+
+$$
 = \max \{749, 1502\} \times \max \{557, \frac{1127}{2}\} = 1502 \times \frac{1127}{2} = 846377
 $$
+
 Portanto:
 $$
 \kappa_{\infin}(A) = 8.46377 \times 10^5
