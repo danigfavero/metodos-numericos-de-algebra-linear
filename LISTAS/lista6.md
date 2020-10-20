@@ -3,7 +3,7 @@
 
 ## Lista 6 - MAC0300
 
-Daniela Gonzalez Favero - 10277443 - 19/10/2020
+Daniela Gonzalez Favero - 10277443 - 20/10/2020
 
 Exercícios extraídos do livro *"Fundamentals of Matrix Computations" - David S. Watkins (John Wiley & Sons, 1991)*.
 
@@ -48,7 +48,7 @@ $$
 |\delta_{ij}| & \leq & |\gamma_{ik}| + |\frac{\beta}{\epsilon}| + \mathcal{O}(u^2) & = & (2j-1)u + \mathcal{O}(u^2).
 \end{matrix}
 $$
- 
+
 
 Portanto
 $$
@@ -131,11 +131,6 @@ $$
 \text{tr}(A + E) = \sum_{i=1}^{n} \sum_{k=1}^{i}\hat{r}^2_{ki} = \|\hat{R}\|_F^2. \ \ \ \ \ \ \ \square 
 $$
 
-
-Se $j>i$, o único elemento  que aparece é $r_{ii}$ 
-$$
-\text{tr}(A+E)=\sum_{i=1}^{n}(a_{ii}+ e_{ii})^2.
-$$
 **(d)** Do *item (a)*, obtemos:
 $$
 \|E\|_F \leq 2nu \|\hat{R}\|_F^2+ \mathcal{O}(u^2).
@@ -156,3 +151,4 @@ Se $2n^{3/2}u<1$, então:
 $$
 \|E\|_F \leq \frac{2n^{2/3}u}{1 - 2n^{2/3}u}\|A\|_F + \mathcal{O}(u^2).\ \ \ \ \ \ \ \square
 $$
+
