@@ -79,7 +79,7 @@ plot(t, b, "o", tt, p1)
 
 Saída do programa:
 
-![](/home/dani/Documents/mac300/LISTAS/lista7a.png)
+![](/home/dani/Documents/mac300/LISTAS/lista7/lista7a.png)
 
 **(d)** Código em *Octave*:
 
@@ -171,7 +171,7 @@ plot(t, b, "o", tt, p2)
 
 Saída do programa:
 
-![](/home/dani/Documents/mac300/LISTAS/lista7b.png)
+![](/home/dani/Documents/mac300/LISTAS/lista7/lista7b.png)
 
 **(d)** Código em *Octave*:
 
@@ -271,7 +271,7 @@ plot(t, b, "o", tt, p5, "-r", tt, p1, ":y", tt, p2, "--g")
 
 Saída do programa:
 
-![](/home/dani/Documents/mac300/LISTAS/lista7c.png)
+![](/home/dani/Documents/mac300/LISTAS/lista7/lista7c.png)
 
 **(d)** Código em *Octave*:
 
