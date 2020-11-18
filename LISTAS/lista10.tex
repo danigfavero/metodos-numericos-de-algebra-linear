@@ -1,0 +1,248 @@
+\documentclass[a4paper,11pt]{article}
+\setlength{\textwidth}{6.3in}
+\setlength{\oddsidemargin}{-.125in}
+\setlength{\evensidemargin}{-.125in}
+\newcommand\tab[1][.5cm]{\hspace*{#1}}
+\usepackage[bottom=1in,top=1in]{geometry}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{mathrsfs}
+\usepackage{amsthm,amssymb,amsmath}
+
+
+
+\title{Lista 10 - MAC0300}
+
+\author{Daniela Gonzalez Favero - 10277443}
+\date{16 de Novembro de 2020}
+
+\begin{document}
+
+    \maketitle
+    
+    Exercícios extraídos do livro "Fundamentals of Matrix Computations"\ – David S. Watkins (John Wiley \& Sons, 1991).
+    \section*{5.2.20}
+        \begin{enumerate}[label=\textbf{(\alph*)}]
+            \item Sabemos que $A_{11}v = \lambda v $, com $v \neq 0$. Então:
+                $$
+                    \begin{bmatrix}
+                        A_{11} & A_{12} \\
+                        0 & A_{22}
+                    \end{bmatrix}
+                    \begin{bmatrix}
+                        v \\
+                        0
+                    \end{bmatrix}
+                    =
+                    \begin{bmatrix}
+                        A_{11}v \\
+                        0
+                    \end{bmatrix}
+                    =
+                    \begin{bmatrix}
+                        \lambda v \\
+                        0
+                    \end{bmatrix}
+                    =
+                    \lambda
+                    \begin{bmatrix}
+                        v \\
+                        0
+                    \end{bmatrix}.
+                $$
+                    Isso significa que $\lambda$ é autovalor de $A$, com autovetor associado $\begin{bmatrix} v \\ 0 \end{bmatrix}$, ou seja, se $w = \vec{0}$, então o autovetor associado é $\begin{bmatrix} v \\ w \end{bmatrix}$.
+                    
+            \item Sabemos que $A_{22}w = \lambda w $, então, para algum $v \neq w$:
+                $$
+                    \begin{bmatrix}
+                        A_{11} & A_{12} \\
+                        0 & A_{22}
+                    \end{bmatrix}
+                    \begin{bmatrix}
+                        v \\
+                        w
+                    \end{bmatrix}
+                    =
+                    \begin{bmatrix}
+                        A_{11}v + A_{12}w \\
+                        A_{22}w
+                    \end{bmatrix}
+                    =
+                    \begin{bmatrix}
+                        A_{11}v + A_{12}w \\
+                        \lambda w
+                    \end{bmatrix}.
+                $$
+                Para que $\lambda$ seja autovalor de $A$, é necessário que:
+                $$
+                    \begin{bmatrix}
+                        A_{11}v + A_{12}w \\
+                        \lambda w
+                    \end{bmatrix}
+                     =
+                    \lambda
+                    \begin{bmatrix}
+                        v \\
+                        w
+                    \end{bmatrix}
+                    =
+                     \begin{bmatrix}
+                        \lambda v \\
+                        \lambda w
+                    \end{bmatrix}
+                    \implies 
+                    A_{11}v + A_{12}w = \lambda v
+                $$
+                Como $\lambda$ não é autovalor de $A_{11}$, sabemos que $\det(A_{11} - \lambda I) \neq 0$, então $A_{11} - \lambda I$ é inversível. Portanto:
+                $$
+                    A_{11}v + A_{12}w = \lambda v \implies v = -(A_{11} - \lambda I)^{-1}A_{12}.
+                $$
+                Então, $v$ é autovetor de $A$ associado ao autovalor $\lambda$ e definido unicamente como $v = -(A_{11} - \lambda I)^{-1}A_{12}$.
+                
+            \item  Sabemos que $A\begin{bmatrix} v \\ w \end{bmatrix} = \lambda \begin{bmatrix} v \\ w \end{bmatrix} $. Então:
+                $$
+                    \begin{bmatrix}
+                        A_{11} & A_{12} \\
+                        0 & A_{22}
+                    \end{bmatrix}
+                    \begin{bmatrix}
+                        v \\
+                        w
+                    \end{bmatrix}
+                    =
+                    \begin{bmatrix}
+                        A_{11}v + A_{12}w \\
+                        A_{22}w
+                    \end{bmatrix}
+                    =
+                    \begin{bmatrix}
+                        \lambda v \\
+                        \lambda w
+                    \end{bmatrix}
+                $$
+                Caso $w = 0$, então pelo item (a), $\lambda$ é autovalor de $A_{11}$. Caso contrário, pelo item (b), $\lambda$ é autovalor de $A_{22}$.
+            
+            \item \textit{Provando a ida:} Se $\lambda$ é autovalor de $A_{11}$ associado a um autovetor $v$, pelo item (a), ele também é autovalor de $A$ associado a um autovetor $\begin{bmatrix} v \\ 0 \end{bmatrix}$. Se $\lambda$ é autovalor de $A_{22}$ associado a um autovetor $w$ (e não é autovalor de $A_{11}$), pelo item (b), ele também é autovalor de $A$ associado a um autovetor $\begin{bmatrix} v \\ w \end{bmatrix}$ tal que $v = -(A_{11} - \lambda I)^{-1}A_{12}$. Então se $\lambda$ é autovalor de um desses blocos, $\lambda$ também é autovalor de $A$. \\
+                \textit{Provando a volta:} Se $\lambda$ é autovalor de $A$ associado a um autovetor $\begin{bmatrix} v \\ w \end{bmatrix}$, pelo item (c), ou $\lambda$ é autovalor de $A_{11}$ associado à $v$, ou $\lambda$ é autovalor de $A_{22}$ associado à $w$. \\
+                Portanto, $\lambda$ é autovalor de $A$ se e somente se é autovalor de $A_{11}$ ou $A_{22}$.
+            
+        \end{enumerate}
+        
+    \section*{5.3.7}
+        \begin{enumerate}[label=\textbf{(\alph*)}]
+            \item Seja $A = \begin{bmatrix}
+                        8 & 1 \\
+                        -2 & 1
+                    \end{bmatrix}$, vamos calcular o maior autovalor e seu respectivo autovetor da matriz utilizando o método da potência. Na tabela abaixo, $j$ é a iteração atual, $q_j$ é o vetor atual que está se aproximando do autovetor desejado, $Aq_j$ é o resultado da multiplicação da matriz $A$ pelo vetor $q_j$ da iteração atual e $\sigma_j$ é o maior elemento de $Aq_j$, que será o respectivo autovalor desejado.
+            
+            \begin{center}
+                \begin{tabular}{ | c | c | c | c | } 
+                    \hline
+                    & & & \\ [-1em]
+                    $j$ & $q_j$ & $Aq_j$ & $\sigma_j$\\  [+.5em]
+                    \hline\hline
+                    & & & \\ [-1em]
+                    0 & $\begin{bmatrix} 1 & 1 \end{bmatrix}$ & $\begin{bmatrix} 9 & -1 \end{bmatrix}$  & 9\\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    1 & $\begin{bmatrix} 1 & 0.111111 \end{bmatrix}$ & $\begin{bmatrix} 7.888888 & -2.111111 \end{bmatrix}$  & 7.888888\\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    2 & $\begin{bmatrix} 1 & -0.267605 \end{bmatrix}$ & $\begin{bmatrix} 7.732394 & -2.267605 \end{bmatrix}$  & 7.732394\\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    3 & $\begin{bmatrix} 1 & -0.293260 \end{bmatrix}$ & $\begin{bmatrix} 7.706739 & -2.293260 \end{bmatrix}$  & 7.706739\\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    4 & $\begin{bmatrix} 1  & -0.297565 \end{bmatrix}$ & $\begin{bmatrix} 7.702434 & -2.297565 \end{bmatrix}$  & 7.702434 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    5 & $\begin{bmatrix} 1 & -0.298290 \end{bmatrix}$ & $\begin{bmatrix}  7.701709 & -2.298290 \end{bmatrix}$  & 7.701709 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    6 & $\begin{bmatrix} 1 & -0.298413 \end{bmatrix}$ & $\begin{bmatrix} 7.701586 & -2.298413 \end{bmatrix}$  & 7.701586\\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    7 & $\begin{bmatrix} 1 & -0.298433 \end{bmatrix}$ & $\begin{bmatrix} 7.701566 & -2.298433 \end{bmatrix}$  & 7.701566\\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    8 & $\begin{bmatrix} 1 & -0.298437 \end{bmatrix}$ & $\begin{bmatrix} 7.701562 & -2.298437 \end{bmatrix}$  & 7.701562\\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    9 & $\begin{bmatrix} 1 & -0.298437 \end{bmatrix}$ & $\begin{bmatrix} 7.701562 & -2.298437 \end{bmatrix}$  & 7.701562\\ [+.5em]
+                    \hline
+                \end{tabular}
+            \end{center}
+            Portanto, o autovalor dominante de $A$ é $\lambda _1 = 7.701562$ e seu autovetor respectivo é $\vec{v}_ 1 = \begin{bmatrix} 7.701562 && -2.298437 \end{bmatrix}$.
+            \item Agora, calculando as proporções $\|q_{j+1}-v\| / \|q_{j}-v\|$ para $j=0,...,8$:
+            \begin{center}
+                \begin{tabular}{ | c | c |} 
+                    \hline
+                    & \\ [-1em]
+                    $j$ & $\|q_{j+1}-v\| / \|q_{j}-v\|$\\  [+.5em]
+                    \hline\hline
+                    & \\ [-1em]
+                    0 & 0.144270\\ [+.5em]
+                    \hline
+                    & \\ [-1em]
+                    1 & 0.164590\\ [+.5em]
+                    \hline
+                    &\\ [-1em]
+                    2 & 0.167921\\ [+.5em]
+                    \hline
+                    & \\ [-1em]
+                    3 & 0.168477\\ [+.5em]
+                    \hline
+                    & \\ [-1em]
+                    4 & 0.168555 \\ [+.5em]
+                    \hline
+                    & \\ [-1em]
+                    5 & 0.168477 \\ [+.5em]
+                    \hline
+                    & \\ [-1em]
+                    6 & 0.167921\\ [+.5em]
+                    \hline
+                    & \\ [-1em]
+                    7 & 0.164590\\ [+.5em]
+                    \hline
+                    &\\ [-1em]
+                    8 & 0.144270\\ [+.5em]
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{enumerate}
+        E calculando a taxa de convergência teórica:
+        $$
+        \begin{matrix}
+            \det(\lambda I - A) = 0 \implies A = \det \left (
+            \begin{bmatrix}
+                \lambda & 0 \\
+                0 & \lambda
+            \end{bmatrix}
+            -
+            \begin{bmatrix}
+                8 & 1 \\
+                -2 & 1
+            \end{bmatrix}
+            \right ) = 0
+            \\
+            \det \left (
+            \begin{bmatrix}
+                \lambda - 8 & -1 \\
+                2 & \lambda - 1
+            \end{bmatrix} 
+            \right ) = 0
+            \implies (\lambda - 8)(\lambda - 1) + 2 = \lambda^2 - 9 \lambda + 10 = 0
+            \\
+            \lambda = (9 \pm \sqrt{41})/2
+            \\
+            \lambda_1 = 7.701562118716424 \text{ e } \lambda_2 = 1.2984378812835757
+            \\
+            |\lambda_2/\lambda_1| = 1.2984378812835757/7.701562118716424 = 0.16859409315521812
+        \end{matrix}
+        $$
+        O que mostra que de fato a teoria concorda com a prática: a taxa de convergência prática e teórica é em torno de $0.16$.
+\end{document}
