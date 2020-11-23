@@ -1,0 +1,493 @@
+\documentclass[a4paper,11pt]{article}
+\setlength{\textwidth}{6.3in}
+\setlength{\oddsidemargin}{-.125in}
+\setlength{\evensidemargin}{-.125in}
+\newcommand\tab[1][.5cm]{\hspace*{#1}}
+\usepackage[bottom=1in,top=1in]{geometry}
+
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{mathrsfs}
+\usepackage{amsthm,amssymb,amsmath}
+
+
+
+\title{Lista 11 - MAC0300}
+
+\author{Daniela Gonzalez Favero - 10277443}
+\date{23 de Novembro de 2020}
+
+\begin{document}
+
+    \maketitle
+    Exercícios extraídos do livro "Fundamentals of Matrix Computations"\ – David S. Watkins (John Wiley \& Sons, 1991).
+    \section*{5.3.15}
+        \begin{enumerate}[label=\textbf{(\alph*)}]
+            \item Encontrando os autovalores de $A$:
+            $$
+                \begin{matrix}
+                    \det(\lambda I - A) = 0 \implies \det \left (
+                    \begin{bmatrix}
+                        \lambda & 0 & 0 \\
+                        0 & \lambda & 0 \\
+                        0 & 0 & \lambda
+                    \end{bmatrix}
+                    -
+                    \begin{bmatrix}
+                        2.99 & 0 & 0 \\
+                        0 & 1.99 & 0\\
+                        0 & 0 & 1.00
+                    \end{bmatrix}
+                    \right ) = 0
+                    \\
+                    \det \left (
+                    \begin{bmatrix}
+                        \lambda - 2.99 & 0 & 0 \\
+                        0 & \lambda - 1.99 & 0\\
+                        0 & 0 & \lambda - 1.00
+                    \end{bmatrix}
+                    \right ) = 0
+                    \\
+                    (\lambda - 2.99)(\lambda - 1.99)(\lambda - 1.00) = 0
+                    \implies
+                    \begin{cases}
+                        \lambda_1 = 2.99
+                        \\
+                        \lambda_2 = 1.99
+                        \\
+                        \lambda_3 = 1.00
+                    \end{cases}
+                \end{matrix}
+            $$
+            E agora, encontrando seus respectivos autovetores:
+            $$
+                Av = \lambda v \implies (A - \lambda I)v = 0
+            $$
+            Para $\lambda_1 = 2.99$:
+            $$
+                \begin{matrix}
+                     \begin{bmatrix}
+                        2.99 & 0 & 0 \\
+                        0 & 1.99 & 0\\
+                        0 & 0 & 1.00
+                    \end{bmatrix}
+                    -
+                    2.99
+                    \begin{bmatrix}
+                        1 & 0 & 0 \\
+                        0 & 1 & 0\\
+                        0 & 0 & 1
+                    \end{bmatrix}
+                    v_1 = 0
+                    \\
+                    \begin{bmatrix}
+                        0 & 0 & 0 \\
+                        0 & -1.00 & 0\\
+                        0 & 0 & -1.99
+                    \end{bmatrix}
+                    \begin{bmatrix}
+                        v_{11} \\
+                        v_{12}\\
+                        v_{13}
+                    \end{bmatrix} 
+                    = 0
+                    \implies
+                    \begin{cases}
+                        -v_{12} = 0 \\
+                        -1.99 \cdot v_{13} = 0
+                    \end{cases}
+                    \implies
+                    \begin{cases}
+                        v_{12} = 0 \\
+                        v_{13} = 0
+                    \end{cases}
+                    
+                \end{matrix}
+            $$
+            Para $\lambda_2 = 1.99$:
+            $$
+                \begin{matrix}
+                    \begin{bmatrix}
+                        1.00 & 0 & 0 \\
+                        0 & 0 & 0\\
+                        0 & 0 & -0.99
+                    \end{bmatrix}
+                    \begin{bmatrix}
+                        v_{21} \\
+                        v_{22}\\
+                        v_{23}
+                    \end{bmatrix} 
+                    = 0
+                    \implies
+                    \begin{cases}
+                        v_{21} = 0 \\
+                        -0.99 \cdot v_{23} = 0
+                    \end{cases}
+                    \implies
+                    \begin{cases}
+                        v_{21} = 0 \\
+                        v_{23} = 0
+                    \end{cases}
+                    
+                \end{matrix}
+            $$
+            Para $\lambda_3 = 1.00$:
+            $$
+                \begin{matrix}
+                    \begin{bmatrix}
+                        1.99 & 0 & 0 \\
+                        0 & 0.99 & 0\\
+                        0 & 0 & 0
+                    \end{bmatrix}
+                    \begin{bmatrix}
+                        v_{31} \\
+                        v_{32}\\
+                        v_{33}
+                    \end{bmatrix} 
+                    = 0
+                    \implies
+                    \begin{cases}
+                        1.99 \cdot v_{31} = 0 \\
+                        0.99 \cdot v_{32} = 0
+                    \end{cases}
+                    \implies
+                    \begin{cases}
+                        v_{31} = 0 \\
+                        v_{32} = 0
+                    \end{cases}
+                    
+                \end{matrix}
+            $$
+            Portanto:
+            $$
+                v_1 =
+                \begin{bmatrix}
+                    1 \\
+                    0\\
+                    0
+                \end{bmatrix} ,\tab
+                v_2 =
+                \begin{bmatrix}
+                    0 \\
+                    1\\
+                    0
+                \end{bmatrix} ,\tab
+                v_3 =
+                \begin{bmatrix}
+                    0 \\
+                    0\\
+                    1
+                \end{bmatrix}.
+            $$
+            
+            \item Encontrando os autovalores de $A - \rho I$, com $\rho = 0.99$:
+            $$
+                \begin{matrix}
+                    \det(\lambda I - A + \rho I) = 0 \implies \det \left (
+                    \begin{bmatrix}
+                        \lambda & 0 & 0 \\
+                        0 & \lambda & 0 \\
+                        0 & 0 & \lambda
+                    \end{bmatrix}
+                    -
+                    \begin{bmatrix}
+                        2.00 & 0 & 0 \\
+                        0 & 1.00 & 0\\
+                        0 & 0 & 0.01
+                    \end{bmatrix}
+                    \right ) = 0
+                    \\
+                    (\lambda - 2.00)(\lambda - 1.00)(\lambda - 0.01) = 0
+                    \implies
+                    \begin{cases}
+                        \lambda_1 = 2.00
+                        \\
+                        \lambda_2 = 1.00
+                        \\
+                        \lambda_3 = 0.01
+                    \end{cases}
+                \end{matrix}
+            $$
+            Agora, encontrando os autovalores de $(A - \rho I)^{-1}$, com $\rho = 0.99$:
+            $$
+                \begin{matrix}
+                    \det(\lambda I - (A - \rho I)^{-1}) = 0 \implies \det \left (
+                    \begin{bmatrix}
+                        \lambda & 0 & 0 \\
+                        0 & \lambda & 0 \\
+                        0 & 0 & \lambda
+                    \end{bmatrix}
+                    -
+                    \begin{bmatrix}
+                        0.50 & 0 & 0 \\
+                        0 & 1.00 & 0\\
+                        0 & 0 & 100
+                    \end{bmatrix}
+                    \right ) = 0
+                    \\
+                    (\lambda - 0.50)(\lambda - 1.00)(\lambda - 100) = 0
+                    \implies
+                    \begin{cases}
+                        \lambda_1 = 0.50
+                        \\
+                        \lambda_2 = 1.00
+                        \\
+                        \lambda_3 = 100
+                    \end{cases}
+                \end{matrix}
+            $$
+            Rodando a iteração direta:
+            \begin{center}
+                \begin{tabular}{ | c | c | c | c | } 
+                    \hline
+                    & & & \\ [-1em]
+                    $j$ & $q_j$ & $Aq_j$ & $\sigma_j$\\  [+.5em]
+                    \hline\hline
+                    & & & \\ [-1em]
+                    0  & $\begin{bmatrix} 1.0 & 1.0 & 1.0 \end{bmatrix}$ & $\begin{bmatrix} 2.0 & 1.0 & 0.01 \end{bmatrix}$  & 2.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    1  & $\begin{bmatrix} 1.0 & 0.5 & 0.005 \end{bmatrix}$ & $\begin{bmatrix} 2.0 & 0.5 & 0.00005 \end{bmatrix}$  & 2.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    2  & $\begin{bmatrix} 1.0 & 0.25 & 0.0000025 \end{bmatrix}$ & $\begin{bmatrix} 2.0 & 0.25 & 0.0 \end{bmatrix}$  & 2.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    3  & $\begin{bmatrix} 1.0 & 0.125 & 0.0 \end{bmatrix}$ & $\begin{bmatrix} 2.0 & 0.125 & 0.0 \end{bmatrix}$  & 2.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    4  & $\begin{bmatrix} 1.0 & 0.0625 & 0.0 \end{bmatrix}$ & $\begin{bmatrix} 2.0 & 0.0625 & 0.0 \end{bmatrix}$  & 2.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    5  & $\begin{bmatrix} 1.0 & 0.03125 & 0.0 \end{bmatrix}$ & $\begin{bmatrix} 2.0 & 0.03125 & 0.0 \end{bmatrix}$  & 2.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    6  & $\begin{bmatrix} 1.0 & 0.015625 & 0.0 \end{bmatrix}$ & $\begin{bmatrix} 2.0 & 0.015625 & 0.0 \end{bmatrix}$  & 2.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    7  & $\begin{bmatrix} 1.0 & 0.007812 & 0.0 \end{bmatrix}$ & $\begin{bmatrix} 2.0 & 0.007812 & 0.0 \end{bmatrix}$  & 2.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    8  & $\begin{bmatrix} 1.0 & 0.003906 & 0.0 \end{bmatrix}$ & $\begin{bmatrix} 2.0 & 0.003906 & 0.0 \end{bmatrix}$  & 2.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    ...  & ... & ...  & ... \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    20  & $\begin{bmatrix} 1.0 & 0.0 & 0.0 \end{bmatrix}$ & $\begin{bmatrix} 2.0 & 0.0 & 0.0 \end{bmatrix}$  & 2.0 \\ [+.5em]
+                    \hline
+                \end{tabular}
+            \end{center}
+
+            Rodando a iteração inversa:
+            \begin{center}
+                \begin{tabular}{ | c | c | c | c | } 
+                    \hline
+                    & & & \\ [-1em]
+                    $j$ & $q_j$ & $Aq_j$ & $\sigma_j$\\  [+.5em]
+                    \hline\hline
+                    & & & \\ [-1em]
+                    0  & $\begin{bmatrix} 1.0 & 1.0 & 1.0 \end{bmatrix}$ & $\begin{bmatrix} 0.5 & 1.0 & 100.0 \end{bmatrix}$  & 100.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    1  & $\begin{bmatrix} 0.005 & 0.01 & 1.0 \end{bmatrix}$ & $\begin{bmatrix} 0.0025 & 0.01 & 100.0 \end{bmatrix}$  & 100.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    2  & $\begin{bmatrix} 0.000025 & 0.0001 & 1.0 \end{bmatrix}$ & $\begin{bmatrix} 0.000012 & 0.0001 & 100.0 \end{bmatrix}$  & 100.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    3  & $\begin{bmatrix} 0 & 0.000001 \end{bmatrix}$ & $\begin{bmatrix} 0 & 0.000001 & 100.0 \end{bmatrix}$  & 100.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    4  & $\begin{bmatrix} 0 & 0 & 1.0 \end{bmatrix}$ & $\begin{bmatrix} 0 & 0 & 100.0 \end{bmatrix}$  & 100.0 \\ [+.5em]
+                    \hline
+                \end{tabular}
+            \end{center}
+            A iteração direta converge para o autovetor $\begin{bmatrix} 1 \\ 0 \\ 0\end{bmatrix}$, ou seja, $\begin{bmatrix} 1.99 \\ 0 \\ 0\end{bmatrix}$ com o \textit{shift}. A iteração inversa converge para $\begin{bmatrix} 0 \\ 0\\ 100\end{bmatrix}$, ou seja, $\begin{bmatrix} 0 \\ 0 \\ 1\end{bmatrix}$ com o \textit{shift} e a inversão. A iteração inversa converge cerca de 4 vezes mais rápido.
+            
+            \item Com \textit{shift} de $\rho=2.00$, $A^{-1}$ se torna $\begin{bmatrix}
+                        \frac{100}{99} & 0 & 0 \\
+                        0 & -100 & 0\\
+                        0 & 0 & -1
+                    \end{bmatrix}$. Rodando a iteração inversa:
+            \begin{center}
+                \begin{tabular}{ | c | c | c | c | } 
+                    \hline
+                    & & & \\ [-1em]
+                    $j$ & $q_j$ & $Aq_j$ & $\sigma_j$\\  [+.5em]
+                    \hline\hline
+                    & & & \\ [-1em]
+                    0  & $\begin{bmatrix} 1.0 & 1.0 & 1.0 \end{bmatrix}$ & $\begin{bmatrix} 1.0101 & -100.0 & -1.0 \end{bmatrix}$  & 100.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    1  & $\begin{bmatrix} 0.010101 & -1.0 & -0.01 \end{bmatrix}$ & $\begin{bmatrix} 0.010203 & 100.0 & 0.01 \end{bmatrix}$  & 100.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    2  & $\begin{bmatrix} 0.000102 & 1.0 & 0.0001 \end{bmatrix}$ & $\begin{bmatrix} 0.000103 & -100.0 & -0.0001 \end{bmatrix}$  & 100.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    3  & $\begin{bmatrix} 0.000001 & -1.0 & -0.000001 \end{bmatrix}$ & $\begin{bmatrix} 0.000001 & 100.0 & 0.000001 \end{bmatrix}$  & 100.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    4  & $\begin{bmatrix} 0 & 1.0 & 0 \end{bmatrix}$ & $\begin{bmatrix} 0 & -100.0 & 0 \end{bmatrix}$  & 100.0 \\ [+.5em]
+                    \hline
+                \end{tabular}
+            \end{center}
+            Com \textit{shift} de $\rho=3.00$, $A^{-1}$ se torna $\begin{bmatrix}
+                        -100 & 0 & 0 \\
+                        0 & -\frac{100}{101} & 0\\
+                        0 & 0 & -\frac{1}{2}
+                    \end{bmatrix}$. Rodando a iteração inversa:
+            \begin{center}
+                \begin{tabular}{ | c | c | c | c | } 
+                    \hline
+                    & & & \\ [-1em]
+                    $j$ & $q_j$ & $Aq_j$ & $\sigma_j$\\  [+.5em]
+                    \hline\hline
+                    & & & \\ [-1em]
+                    0  & $\begin{bmatrix} 1.0 & 1.0 & 1.0 \end{bmatrix}$ & $\begin{bmatrix} -100.0 & -0.990099 & -0.5 \end{bmatrix}$  & 100.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    1  & $\begin{bmatrix} -1.0 & -0.009900 & -0.005 \end{bmatrix}$ & $\begin{bmatrix} 100.0 & 0.009802 & 0.0025 \end{bmatrix}$  & 100.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    2  & $\begin{bmatrix} 1.0 & 0.000098 & 0.000025 \end{bmatrix}$ & $\begin{bmatrix} -100.0 & -0.000097 & -0.000012 \end{bmatrix}$  & 100.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    3  & $\begin{bmatrix} -1.0 & 0 & 0 \end{bmatrix}$ & $\begin{bmatrix} 100.0 & 0 & 0 \end{bmatrix}$  & 100.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    4  & $\begin{bmatrix} 1.0 & 0 & 0 \end{bmatrix}$ & $\begin{bmatrix} -100.0 & 0 & 0 \end{bmatrix}$  & 100.0 \\ [+.5em]
+                    \hline
+                \end{tabular}
+            \end{center}
+            Para $\rho = 2.00$, a sequência converge para $\begin{bmatrix} 0 \\ 1 \\ 0\end{bmatrix}$; enquanto que para $\rho = 3.00$, converge para $\begin{bmatrix} 1 \\ 0 \\ 0\end{bmatrix}$.
+            
+        \end{enumerate}
+    
+    \section*{5.3.17}
+        \begin{enumerate}[label=\textbf{(\alph*)}]
+            \item Seja $B = (A - 8I)^{-1}$, então:
+            $$
+            B = 
+            \left ( 
+            \begin{bmatrix}
+                8 & 1 \\
+                -2 & 1
+            \end{bmatrix}
+            -
+            \begin{bmatrix}
+                8 & 0 \\
+                0 & 8
+            \end{bmatrix}
+            \right ) ^{-1}
+            =
+            \left ( 
+            \begin{bmatrix}
+                0 & 1 \\
+                -2 & -7
+            \end{bmatrix}
+            \right ) ^{-1}
+            =
+            \begin{bmatrix}
+                -3.5 & -0.5 \\
+                1 & 0
+            \end{bmatrix}.
+            $$
+            Rodando a iteração inversa:
+            \begin{center}
+                \begin{tabular}{ | c | c | c | c | } 
+                    \hline
+                    & & & \\ [-1em]
+                    $j$ & $q_j$ & $Aq_j$ & $\sigma_j$\\  [+.5em]
+                    \hline\hline
+                    & & & \\ [-1em]
+                    0  & $\begin{bmatrix} 1.0 & 1.0 \end{bmatrix}$ & $\begin{bmatrix} -4.0 & 1.0 \end{bmatrix}$  & 4.0 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    1  & $\begin{bmatrix} -1.0 & 0.25 \end{bmatrix}$ & $\begin{bmatrix} 3.375 & -1.0 \end{bmatrix}$  & 3.375 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    2  & $\begin{bmatrix} 1.0 & -0.296296 \end{bmatrix}$ & $\begin{bmatrix} -3.35185 & 1.0 \end{bmatrix}$  & 3.35185 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    3  & $\begin{bmatrix} -1.0 & 0.298343 \end{bmatrix}$ & $\begin{bmatrix} 3.35083 & -1.0 \end{bmatrix}$  & 3.35083 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    4  & $\begin{bmatrix} 1.0 & -0.298434 \end{bmatrix}$ & $\begin{bmatrix} -3.35078 & 1.0 \end{bmatrix}$  & 3.35078 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    5  & $\begin{bmatrix} -1.0 & 0.298438 \end{bmatrix}$ & $\begin{bmatrix} 3.35078 & -1.0 \end{bmatrix}$  & 3.35078 \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    6  & $\begin{bmatrix} 1.0 & -0.298438 \end{bmatrix}$ & $\begin{bmatrix} -3.35078 & 1.0 \end{bmatrix}$  & 3.35078 \\ [+.5em]
+                    \hline
+                \end{tabular}
+            \end{center}
+            A iteração inversa converge para $\begin{bmatrix} 1.0 \\ -0.298438\end{bmatrix}$, com autovalor associado $-3.35078$, ou seja, o autovalor é $7.701492$ com o \textit{shift} e a inversão.
+            
+            \item Calculando as proporções $\|q_{j+1}-v\| / \|q_{j}-v\|$ para $j=0,...,5$:
+            \begin{center}
+                \begin{tabular}{ | c | c |} 
+                    \hline
+                    & \\ [-1em]
+                    $j$ & $\|q_{j+1}-v\| / \|q_{j}-v\|$\\  [+.5em]
+                    \hline\hline
+                    & \\ [-1em]
+                    0 & 0.069042\\ [+.5em]
+                    \hline
+                    & \\ [-1em]
+                    1 & 0.044213\\ [+.5em]
+                    \hline
+                    &\\ [-1em]
+                    2 & 0.044518\\ [+.5em]
+                    \hline
+                    & \\ [-1em]
+                    3 & 0.044528\\ [+.5em]
+                    \hline
+                    & \\ [-1em]
+                    4 & 0.044448 \\ [+.5em]
+                    \hline
+                    & \\ [-1em]
+                    5 & 0.042634 \\ [+.5em]
+                    \hline
+                \end{tabular}
+            \end{center}
+        
+        E calculando a taxa de convergência teórica:
+        $$
+        \begin{matrix}
+            \det(\lambda I - A) = 0 \implies A = \det \left (
+            \begin{bmatrix}
+                \lambda & 0 \\
+                0 & \lambda
+            \end{bmatrix}
+            -
+            \begin{bmatrix}
+                8 & 1 \\
+                -2 & 1
+            \end{bmatrix}
+            \right ) = 0
+            \\
+            \det \left (
+            \begin{bmatrix}
+                \lambda - 8 & -1 \\
+                2 & \lambda - 1
+            \end{bmatrix} 
+            \right ) = 0
+            \implies (\lambda - 8)(\lambda - 1) + 2 = \lambda^2 - 9 \lambda + 10 = 0
+            \\
+            \lambda = (9 \pm \sqrt{41})/2
+            \\
+            \lambda_1 = 7.701562118716424 \text{ e } \lambda_2 = 1.2984378812835757
+            \\
+            |\lambda_1 - 8/\lambda_2 - 8| = |(7.701562-8)/(1.298437-8)| = 0.044532
+        \end{matrix}
+        $$
+        O que mostra que de fato a teoria concorda com a prática: a taxa de convergência prática e teórica é em torno de $0.04$.
+            
+       \end{enumerate}
+       
+\end{document}
