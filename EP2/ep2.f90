@@ -240,7 +240,7 @@ function lucol(n, A, p) result(sucesso)
 
         do k=j+1,n
             do i=j+1,n
-                A(i,k) = A(i,k) - A(i,j)*A(j,j)
+                A(i,k) = A(i,k) - A(i,j)*A(j,k)
             enddo
         enddo
     enddo
@@ -256,7 +256,8 @@ function sscol(n, A, p, b) result(sucesso)
     implicit none
     integer, intent(in) :: n
     real(dp) :: A(n,n), b(n), aux
-    integer :: p(n), sucesso, i, j, backcol
+    integer :: p(n), i, j, sucesso, backrow
+
     do i=1,n
         if (p(i) /= 0) then
             aux = b(i)
@@ -265,13 +266,13 @@ function sscol(n, A, p, b) result(sucesso)
         endif
     enddo
 
-    do i=1,n
-        do j=1,i-1
+    do j=1,n
+        do i=j+1,n
             b(i) = b(i) - A(i,j)*b(j)
         enddo
     enddo
 
-    sucesso = backcol(n, A, b, 0)
+    sucesso = backrow(n, A, b, 0)
 
 end function sscol
 
@@ -318,7 +319,7 @@ function lurow(n, A, p) result(sucesso)
         do i=j+1,n
             A(i,j) = A(i,j)/A(j,j)
             do k=j+1,n
-                A(i,k) = A(i,k) - A(i,j)*A(j,j)
+                A(i,k) = A(i,k) - A(i,j)*A(j,k)
             enddo
         enddo
     enddo
@@ -334,8 +335,7 @@ function ssrow(n, A, p, b) result(sucesso)
     implicit none
     integer, intent(in) :: n
     real(dp) :: A(n,n), b(n), aux
-    integer :: p(n), i, j, sucesso, backrow
-
+    integer :: p(n), sucesso, i, j, backcol
     do i=1,n
         if (p(i) /= 0) then
             aux = b(i)
@@ -344,13 +344,13 @@ function ssrow(n, A, p, b) result(sucesso)
         endif
     enddo
 
-    do j=1,n
-        do i=j+1,n
+    do i=1,n
+        do j=1,i-1
             b(i) = b(i) - A(i,j)*b(j)
         enddo
     enddo
 
-    sucesso = backrow(n, A, b, 0)
+    sucesso = backcol(n, A, b, 0)
 
 end function ssrow
 
