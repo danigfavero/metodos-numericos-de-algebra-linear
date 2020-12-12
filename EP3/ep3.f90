@@ -19,7 +19,7 @@ subroutine rescale(A, n, m, max)
 
     max = 0
     do j=1,m
-        do i=1,n 
+        do i=1,n
             if (abs(A(i,j)) > max) then
                 max = abs(A(i,j))
             endif
@@ -27,7 +27,7 @@ subroutine rescale(A, n, m, max)
     enddo
 
     do j=1,m
-        do i=1,n 
+        do i=1,n
             A(i,j) = A(i,j)/max
         enddo
     enddo
@@ -44,11 +44,11 @@ function permutation(A, n, m, k, norms, perm) result(rank)
     use, intrinsic :: ieee_arithmetic
     implicit none
     integer, intent(in) :: n, m
-    real(dp) :: max_val, A(n,m), norms(m), eps, aux
+    real(dp) :: max_val, A(n,m), norms(m), eps, temp
     integer :: k, i, j, max, rank, perm(m)
 
     rank = 1
-    eps = 0
+    eps = epsilon(eps)
 
     if (k > 1) then
         do j=k,m
@@ -71,14 +71,14 @@ function permutation(A, n, m, k, norms, perm) result(rank)
         perm(k) = max
 
         if (max /= k) then
-            aux = norms(k)
+            temp = norms(k)
             norms(k) = norms(max)
-            norms(max) = aux
+            norms(max) = temp
 
-            do i=1,n 
-                aux = A(i,k)
+            do i=1,n
+                temp = A(i,k)
                 A(i,k) = A(i, max)
-                A(i, max) = aux
+                A(i, max) = temp
             enddo
 
         endif
@@ -123,21 +123,24 @@ function backcol(n, A, b) result(sucesso)
     implicit none
     integer, intent(in) :: n
     real(dp), intent(in) :: A(n,n)
-    real(dp):: b(n)
+    real(dp):: b(n), eps
     integer :: sucesso, j, i
 
     sucesso = 0
-    do j=1,n
-        if (A(j,j) == 0) then
+    eps = 0.0001
+
+    do j=n,1,-1
+        if (A(j,j) < eps .and. A(j,j) > -eps) then
             sucesso = -1
             exit
         endif
+        
+        b(j) = b(j)/A(j,j)
 
-        b(j) =  b(j)/A(j,j)
+        do i=j-1,1,-1
+            b(i) = b(i) - A(i,j) * b(j)
+        enddo
 
-        do i=n,j+1,-1
-            b(i) = b(i) - A(i,j)*b(j)
-        enddo 
     enddo
 
 end function backcol
@@ -159,6 +162,10 @@ subroutine qr(A, n, m, gammas, perm, max, rank)
     real(dp) :: A(n,m), v(m), gammas(m)
     real(dp) :: norms(m), max
     real(dp) :: reflector
+
+    do i=1,m
+        perm(i) = 1
+    enddo
 
     call rescale(A, n, m, max)
 
@@ -208,11 +215,11 @@ subroutine leastsquares(n, m, A, b)
     integer, intent(in) :: n, m
     real(dp) :: A(n,m), b(n)
     integer :: singular, backcol, rank, i, k, perm(m)
-    real(dp) :: gammas(m), v, max, aux
+    real(dp) :: gammas(m), v, max, temp
 
     call qr(A, n, m, gammas, perm, max, rank)
 
-    do i=1,n 
+    do i=1,n
         b(i) = b(i)/max
     enddo
 
@@ -221,12 +228,13 @@ subroutine leastsquares(n, m, A, b)
         v = b(k)
 
         do i=k+1,n
-            v = v + (gammas(k) * A(i, k)) * b(i)
+            v = v + (A(i, k) * b(i))
         enddo
+        b(k) = b(k) - (gammas(k) * v)
 
         ! b <- b - (u * v^T)
         do i=k+1,n
-            b(i) = b(i) - (A(i,k) * v)
+            b(i) = b(i) - (gammas(k) * v * A(i,k))
         enddo
 
     enddo
@@ -234,9 +242,9 @@ subroutine leastsquares(n, m, A, b)
     singular = backcol(rank, A, b)
 
     do i=1,rank
-        aux = b(i)
+        temp = b(i)
         b(i) = b(perm(i))
-        b(perm(i)) = aux
+        b(perm(i)) = temp
     enddo
 
 end subroutine leastsquares
@@ -250,6 +258,7 @@ program ep3
     integer :: n, m, i, j
     real(dp), allocatable :: A(:,:), b(:)
     real(dp) :: aij, bi
+    real(kind=8)::start, finish
 
     read (*,*) n, m
 
@@ -267,9 +276,14 @@ program ep3
         b(i) = bi
     enddo
 
+    ! call cpu_time(start)
     call leastsquares(n, m, A, b)
+    ! call cpu_time(finish)
+    ! print *, finish-start
 
-    print *,b
+    do i=1,m
+        print *,b(i)
+    enddo
 
     deallocate(A)
     deallocate(b)
