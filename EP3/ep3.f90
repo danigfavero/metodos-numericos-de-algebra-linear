@@ -164,7 +164,8 @@ subroutine qr(A, n, m, gammas, perm, max, rank)
     real(dp) :: reflector
 
     do i=1,m
-        perm(i) = 1
+        perm(i) = i
+        v(i) = 0
     enddo
 
     call rescale(A, n, m, max)
@@ -186,8 +187,8 @@ subroutine qr(A, n, m, gammas, perm, max, rank)
         gammas(k) = reflector(A, n, m, k, norms)
 
         ! v^T <- (gamma * u^T) * B
-        do j=k+1,m 
-            v(j) = 0
+        do j=k+1,m
+            v(j) = gammas(k) * A(k,j)
             do i=k+1,n
                 v(j) = v(j) + (gammas(k) * A(k, j)) * A(i,j)
             enddo
@@ -195,6 +196,7 @@ subroutine qr(A, n, m, gammas, perm, max, rank)
 
         ! B <- B - (u * v^T)
         do j=k+1,m
+            A(k,j) = A(k,j) - v(j)
             do i=k+1,n
                 A(i,j) = A(i,j) - (A(i,k) * v(j))
             enddo
