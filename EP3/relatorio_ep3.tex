@@ -16,6 +16,8 @@
 \geometry{includeheadfoot,margin=2cm}
 \usepackage{listings}
 \lstset{language=matlab}
+\usepackage{graphicx}
+\graphicspath{ {./} }
 
 
 \title{Exercício Programa 3 - Matrizes ortogonais e o problema de quadrados mínimos}
@@ -163,7 +165,6 @@
         \end{lstlisting}
         
         Também gerei 2 testes manualmente para verificar exemplos com aproximação de polinômios dado um conjunto de pontos. Assim veremos o quão bem o método dos quadrados mínimos aproxima o conjunto de dados ao polinômio desejado. Primeiro usamos o seguinte conjunto de dados, para um polinômio de grau 1:
-        % f(x) = 12.5 - 1.73 x
         \begin{center}
             \begin{tabular}{ | c || c | c | c | c | c | c | c | c | } 
                 \hline
@@ -303,7 +304,11 @@
     \subsection{Verificando a acurácia do algoritmo}
         Para verificar a acurácia do algoritmo, utilizei os testes gerados manualmente. Inserindo $A$ e $b$ do primeiro exemplo, temos:
         $$
-        x =
+            x =
+            \begin{bmatrix}
+                12.4750 \\
+                -1.7571
+            \end{bmatrix}
         $$
         
         Novamente utilizei um programa em \textit{octave}, desta vez para imprimir um gráfico que compara os pontos do conjunto de entrada com o polinômio obtido:
@@ -320,12 +325,17 @@
             plot(t, b, "o", tt, p1);
         \end{lstlisting}
         
-        O gráfico obtido foi o seguinte:
-        % GRÁFICO
+        O gráfico obtido foi o seguinte: \\
+        \includegraphics[scale=0.7]{pol1}
         
         Da mesma forma, inserindo $A$ e $b$ do segundo exemplo, temos:
         $$
-        x =
+            x =
+            \begin{bmatrix}
+                9.1625 \\
+                -7.4685 \\
+                1.1494
+            \end{bmatrix}
         $$
         
         O código em \textit{octave} ficou assim:
@@ -343,12 +353,40 @@
             plot(t, b, "o", tt, p1);
         \end{lstlisting}
         
-        O gráfico obtido foi o seguinte:
-        % GRÁFICO
+        O gráfico obtido foi o seguinte: \\
+        \includegraphics[scale=0.7]{pol2}
+        
+        Em ambos os testes a acurácia foi bem sucedida, os gráficos mostram a proximidade dos pontos dados com o polinômio estimado.
         
     \subsection{Verificando a eficiência do algoritmo}
         Para verificar a eficiência do algoritmo, utilizei as matrizes geradas aleatoriamente, aumentando $n$ e $m$ progressivamente. Medi o consumo de tempo com a subrotina \textit{cputime()} (nativa do \textit{FORTRAN}), no próprio programa. A tabela de tempos ficou assim:
-        %TABELA
-
+        \begin{center}
+            \begin{tabular}{ | c | c | c |} 
+                \hline
+                & & \\ [-1em]
+                $n$ & $m$ & Consumo de Tempo (s)\\  [+.5em]
+                \hline\hline
+                & & \\ [-1em]
+                20 & 10 & $4.0 \times 10^{-5}$\\ [+.5em]
+                \hline
+                & & \\ [-1em]
+                20 & 20 & $1.3 \times 10^{-5}$\\ [+.5em]
+                \hline
+                & & \\ [-1em]
+                200 & 100 & $8.7 \times 10^{-4}$\\ [+.5em]
+                \hline
+                & & \\ [-1em]
+                200 & 200 & $9.3 \times 10^{-4}$\\ [+.5em]
+                \hline
+                & & \\ [-1em]
+                2000 & 1000 & $4.9 \times 10^{-2}$\\ [+.5em]
+                \hline
+                & & \\ [-1em]
+                2000 & 2000 & $1.1 \times 10^{-1}$\\ [+.5em]
+                \hline
+            \end{tabular}
+        \end{center}
+        Que mostra, na prática, como o algoritmo depende bem mais de $n$ em sua eficiência; afinal sempre subtraímos $\frac{2}{3}m^3$ flops da contagem de $nm^2$.
+            
 \end{document}
 

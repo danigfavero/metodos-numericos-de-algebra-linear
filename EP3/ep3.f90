@@ -278,14 +278,15 @@ program ep3
         b(i) = bi
     enddo
 
-    ! call cpu_time(start)
+    call cpu_time(start)
     call leastsquares(n, m, A, b)
-    ! call cpu_time(finish)
-    ! print *, finish-start
+    call cpu_time(finish)
+    print *, "TIME: ",finish-start
 
-    do i=1,m
-        print *,b(i)
-    enddo
+    ! imprime x ------ cuidado, só use para soluções pequenas
+    ! do i=1,m
+    !     print *, b(i)
+    ! enddo
 
     deallocate(A)
     deallocate(b)
