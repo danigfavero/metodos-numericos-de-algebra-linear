@@ -93,26 +93,32 @@ end subroutine cg
 program ep4
     use, intrinsic :: iso_c_binding, only: sp=>c_float, dp=>c_double
     implicit none
-    integer :: m, i, j
+    integer :: m, i, j, k
     real(dp), allocatable :: A(:,:), b(:), x(:)
     real(dp) :: aij, bi
 
     read (*,*) m
 
     allocate(A(m,m))
-    do i=1,m
-        do j=1,m
-            read(*,*) aij
+    do k=1,m*m
+        read (*,*) i, j, aij
+        if (i < 1 .or. j < 1 .or. i > m .or. j > m) then
+            print *, "ERROR: Index out of bound"
+        else
             A(i,j) = aij
-        enddo
+        endif
     enddo
 
     allocate(b(m))
     allocate(x(m))
-    do i=1,m
-        read(*,*) bi
-        b(i) = bi
-        x(i) = 0
+    do k=1,m
+        read (*,*) i, bi
+        if (i < 1 .or. i > m) then
+            print *, "ERROR: Index out of bound"
+        else
+            b(i) = bi
+            x(i) = 0
+        endif
     enddo
 
     call cg(m, A, b, x)
