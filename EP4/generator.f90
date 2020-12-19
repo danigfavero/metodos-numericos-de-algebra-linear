@@ -27,4 +27,10 @@ program generator
         enddo
     enddo
 
+    do i=1,m
+        call random_number(r)
+        aij = (2 * r - 1)
+        print *, i, aij
+    enddo
+
 end program generator

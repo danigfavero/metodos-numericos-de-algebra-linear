@@ -29,77 +29,108 @@
     \maketitle
     
     \section{O Método de Gradientes Conjugados}
-    \subsection{Definindo o problema}
-        Seja $A \in \mathbb{R}^{m \times m}$ simétrica e definida positiva, queremos resolver o sistema de equações não-singular $Ax=b$, com solução exata $x_* = A^{-1}b$. Vamos usar $\mathcal{K}_n$ para denotar o n-ésimo subespaço de Krylov gerado por $b$: $\mathcal{K}_n = \langle b,Ab, \dots , A^{n-1}b \rangle$.
-        
-        A função $\| \cdot \|_A$ definida por $\| x \|_A = \sqrt{x^TAx}$ é a $A$-norma sobre $\mathbb{R}^{m}$. O vetor cuja $A$-norma nos interessa é $e_n=x_*-x_n$, o erro no passo $n$. A iteração do gradiente conjugado se dá por um sistema de fórmulas de recorrência que gera uma sequência única de iterados $\{ x_n \in \mathcal{K}_n \}$, com a propriedade de que no passo $n$, $\| e_n \|_A$ é minimizado.
-    \subsection{O algoritmo}
-        O esqueleto do algoritmo se dá por:
-        \begin{algorithm}
-            \renewcommand\thealgorithm{}
-            \caption{Gradientes Conjugados}
-            \begin{algorithmic} 
-                \STATE $x_0 \leftarrow 0,\ r_0 \leftarrow b,\ p_0 \leftarrow r_0$
-                \FOR{n\ =\ 1,2,3,\dots}
-                    \STATE $\alpha_n \leftarrow (r^T_{n-1}r_{n-1})/(p^T_{n-1}Ap_{n-1})$
-                    \STATE $x_n \leftarrow x_{n-1} + \alpha_np_{n-1}$
-                    \STATE $r_n \leftarrow r_{n-1} - \alpha_nAp_{n-1}$
-                    \STATE $\beta_n \leftarrow (r^T_nr_n)/(r^T_{n-1}r_{n-1})$
-                    \STATE $p_n \leftarrow r_n + \beta_np_{n-1}$
-                \ENDFOR
-            \end{algorithmic}
-        \end{algorithm}
-        
-        A cada passo, o algoritmo realiza diversas manipulações com vetores e um produto matriz-vetor ($Ap_{n-1}$). Se $A$ for densa e não-estruturada, o produto matriz-vetor domina a contagem de operações, de modo que cada passo leva aproximadamente $2m^2$ flops. Caso contrário, $Ap_{n-1}$ pode ser computado em $\mathcal{O}(m)$ operações.
+        Esta primeira parte do relatório tem como objetivo fazer um resumo descrevendo o método de Gradientes Conjugados. Para isto, usei como base o capítulo 38 do livro \textit{"Numerical Linear Algebra"\ – Lloyd N. Trefethen, David Bau (Society for Industrial and Applied Mathematics, Philadelphia, 1997)}.
     
-    \subsection{Propriedades do método}
-        A partir do algoritmo podemos deduzir algumas propriedades, dentre elas: \\
-        \textbf{Teorema:} Tome a aplicação do algoritmo de gradientes conjugados em um problema $Ax=b$, com $A$ simétrica e definida positiva. Enquanto não converge, o algoritmo procede sem divisões por zero, e temos as seguintes identidades dos subespaços:
-        $$
-            \mathcal{K}_n = \langle x_1, x_2, \dots, x_n  \rangle = \langle p_0, p_1, \dots, p_{n-1}  \rangle = \langle r_0, r_1, \dots, r_{n-1}  \rangle = \langle b, Ab, \dots, A^{n-1}b  \rangle.
-        $$
-        Além disso, os resíduos são ortogonais:
-        $$
-            r^T_nr_j = 0\ \ (j<n),
-        $$
-        e as direções de busca são "$A$-conjugadas":
-        $$
-            p^T_nAp_j = 0\ \ (j<n).
-        $$
+        \subsection{Definindo o problema}
+            Seja $A \in \mathbb{R}^{m \times m}$ simétrica e definida positiva, queremos resolver o sistema de equações não-singular $Ax=b$, com solução exata $x_* = A^{-1}b$. Vamos usar $\mathcal{K}_n$ para denotar o n-ésimo subespaço de Krylov gerado por $b$: $\mathcal{K}_n = \langle b,Ab, \dots , A^{n-1}b \rangle$.
+            
+            A função $\| \cdot \|_A$ definida por $\| x \|_A = \sqrt{x^TAx}$ é a $A$-norma sobre $\mathbb{R}^{m}$. O vetor cuja $A$-norma nos interessa é $e_n=x_*-x_n$, o erro no passo $n$. A iteração do gradiente conjugado se dá por um sistema de fórmulas de recorrência que gera uma sequência única de iterados $\{ x_n \in \mathcal{K}_n \}$, com a propriedade de que no passo $n$, $\| e_n \|_A$ é minimizado.
+        \subsection{O algoritmo}
+            O esqueleto do algoritmo se dá por:
+            \begin{algorithm}
+                \renewcommand\thealgorithm{}
+                \caption{Gradientes Conjugados}
+                \begin{algorithmic} 
+                    \STATE $x_0 \leftarrow 0,\ r_0 \leftarrow b,\ p_0 \leftarrow r_0$
+                    \FOR{n\ =\ 1,2,3,\dots}
+                        \STATE $\alpha_n \leftarrow (r^T_{n-1}r_{n-1})/(p^T_{n-1}Ap_{n-1})$
+                        \STATE $x_n \leftarrow x_{n-1} + \alpha_np_{n-1}$
+                        \STATE $r_n \leftarrow r_{n-1} - \alpha_nAp_{n-1}$
+                        \STATE $\beta_n \leftarrow (r^T_nr_n)/(r^T_{n-1}r_{n-1})$
+                        \STATE $p_n \leftarrow r_n + \beta_np_{n-1}$
+                    \ENDFOR
+                \end{algorithmic}
+            \end{algorithm}
+            
+            A cada passo, o algoritmo realiza diversas manipulações com vetores e um produto matriz-vetor ($Ap_{n-1}$). Se $A$ for densa e não-estruturada, o produto matriz-vetor domina a contagem de operações, de modo que cada passo leva aproximadamente $2m^2$ flops. Caso contrário, $Ap_{n-1}$ pode ser computado em $\mathcal{O}(m)$ operações.
         
-        Desse teorema, segue um corolário sobre a minimalidade de $\| e_n \|_A$: \\
-        \textbf{Corolário:}  Tome a aplicação do algoritmo de gradientes conjugados em um problema $Ax=b$, com $A$ simétrica e definida positiva. Se o algoritmo ainda não convergiu, então $x_n$ é o único ponto em $\mathcal{K}_n$ que minimiza $\| e_n \|_A$. A convergência é monótona,
-        $$
-            \| e_n \|_A \leq \| e_{n-1} \|_A,
-        $$
-        e $e_n = 0$ é atingido para algum $n \leq m$.
-    
-    \subsection{Outras aplicações}
-        É importante notar que a propriedade de otimalidade do algoritmo de gradientes conjugados de minimizar  $\| e_n \|_A$ no passo $n$ sobre todos os vetores $x \in \mathcal{K}_n$ mostra que este é um algoritmo de otimização. Com ele, pode-se minimizar a função quadrática $\varphi(x) =  \frac{1}{2}x^TAx-x^Tb$, dados $A$ e $b$ e $x \in \mathbb{R}^m$. A cada passo, uma iteração $x_n = x_{n-1}+ \alpha_np_{n-1}$ é computada de tal forma que minimize $\varphi(x)$ sobre todo $x$ no espaço unidimensional $x_{n-1}+ \langle p_{n-1} \rangle$.
+        \subsection{Propriedades do método}
+            A partir do algoritmo podemos deduzir algumas propriedades, dentre elas: \\
+            \textbf{Teorema:} Tome a aplicação do algoritmo de gradientes conjugados em um problema $Ax=b$, com $A$ simétrica e definida positiva. Enquanto não converge, o algoritmo procede sem divisões por zero, e temos as seguintes identidades dos subespaços:
+            $$
+                \mathcal{K}_n = \langle x_1, x_2, \dots, x_n  \rangle = \langle p_0, p_1, \dots, p_{n-1}  \rangle = \langle r_0, r_1, \dots, r_{n-1}  \rangle = \langle b, Ab, \dots, A^{n-1}b  \rangle.
+            $$
+            Além disso, os resíduos são ortogonais:
+            $$
+                r^T_nr_j = 0\ \ (j<n),
+            $$
+            e as direções de busca são "$A$-conjugadas":
+            $$
+                p^T_nAp_j = 0\ \ (j<n).
+            $$
+            
+            Desse teorema, segue um corolário sobre a minimalidade de $\| e_n \|_A$: \\
+            \textbf{Corolário:}  Tome a aplicação do algoritmo de gradientes conjugados em um problema $Ax=b$, com $A$ simétrica e definida positiva. Se o algoritmo ainda não convergiu, então $x_n$ é o único ponto em $\mathcal{K}_n$ que minimiza $\| e_n \|_A$. A convergência é monótona,
+            $$
+                \| e_n \|_A \leq \| e_{n-1} \|_A,
+            $$
+            e $e_n = 0$ é atingido para algum $n \leq m$.
         
-        O método de gradientes conjugados também pode ser utilizado para aproximação de polinômios, por meio da $A$-norma do erro. O problema pode ser descrito como: Encontrar $p_n \in P_n$ tal que $\| p_n (A) e_0 \|_A =$ mínimo, sendo $e_0=x_*-x_0=x_*$ o erro inicial. A convergência do método decorre do seguinte teorema:\\
-        \textbf{Teorema:} Se o método de gradientes conjugados ainda não convergiu antes do passo $n$, então o problema da aproximação de polinômios tem uma solução única $p_n \in P_n$, e o iterado $x_n$ tem erro $e_n=p_n(A)e_0$ para esse mesmo polinômio $p_n$. Consequentemente, temos:
-         $$
-            \frac{\|e_n\|_A}{\|e_0\|_A} = \inf_{p \in P_n} \frac{\|p(A)e_0\|_A}{\|e_0\|_A} \leq \inf_{p \in P_n} \max_{\lambda \in \Lambda(A)} |p(\lambda)|,
-         $$
-         onde $\Lambda(A)$ denota o espectro de A.
-        
-    \subsection{Taxa de convergência}
-        O último teorema acima estabelece que a taxa de convergência do método de gradientes conjugados é determinado pela localização do espectro de $A$. Um bom espectro é o tem seus polinômios $p_n \in P_n$ podendo ser bem pequenos, com o tamanho diminuindo rapidamente com $n$. Dois corolários desse teorema explicam como isso pode acontecer:\\
-        \textbf{Corolário:} Se $A$ tem apenas $n$ autovalores distintos, então o método de gradientes conjugados converge em no máximo $n$ passos.
-        
-        No outro extremo:\\
-        \textbf{Corolário:} Tome o método de gradientes conjugados aplicado a um problema $Ax=b$, com $A$ simétrica, definida positiva e cujo número de condição 2-norma é $\kappa$. Então as $A$-normas dos erros satisfazem
-        $$
-            \frac{\|e_n\|_A}{\|e_0\|_A} \leq 2 \left/ \left[ \left( \frac{\sqrt{\kappa}+1}{\sqrt{\kappa}-1} \right)^n + \left( \frac{\sqrt{\kappa}+1}{\sqrt{\kappa}-1} \right)^{-n} \right] \leq 2 \left( \frac{\sqrt{\kappa}-1}{\sqrt{\kappa}+1} \right)^n.
-        $$
-        
-        Este segundo corolário é o mais famoso sobre a convergência do método de gradientes conjugados. Como
-        $$
-            \frac{\sqrt{\kappa}-1}{\sqrt{\kappa}+1} ~ 1 - \frac{2}{\sqrt{\kappa}}
-        $$
-        quando $\kappa \to \infty$, isso implica que se $\kappa$ é grande mas não muito grande, a convergência para uma tolerância especificada pode ser de $\mathcal{O}(\sqrt{\kappa})$ iterações.
+        \subsection{Outras aplicações}
+            É importante notar que a propriedade de otimalidade do algoritmo de gradientes conjugados de minimizar  $\| e_n \|_A$ no passo $n$ sobre todos os vetores $x \in \mathcal{K}_n$ mostra que este é um algoritmo de otimização. Com ele, pode-se minimizar a função quadrática $\varphi(x) =  \frac{1}{2}x^TAx-x^Tb$, dados $A$ e $b$ e $x \in \mathbb{R}^m$. A cada passo, uma iteração $x_n = x_{n-1}+ \alpha_np_{n-1}$ é computada de tal forma que minimize $\varphi(x)$ sobre todo $x$ no espaço unidimensional $x_{n-1}+ \langle p_{n-1} \rangle$.
+            
+            O método de gradientes conjugados também pode ser utilizado para aproximação de polinômios, por meio da $A$-norma do erro. O problema pode ser descrito como: Encontrar $p_n \in P_n$ tal que $\| p_n (A) e_0 \|_A =$ mínimo, sendo $e_0=x_*-x_0=x_*$ o erro inicial. A convergência do método decorre do seguinte teorema:\\
+            \textbf{Teorema:} Se o método de gradientes conjugados ainda não convergiu antes do passo $n$, então o problema da aproximação de polinômios tem uma solução única $p_n \in P_n$, e o iterado $x_n$ tem erro $e_n=p_n(A)e_0$ para esse mesmo polinômio $p_n$. Consequentemente, temos:
+             $$
+                \frac{\|e_n\|_A}{\|e_0\|_A} = \inf_{p \in P_n} \frac{\|p(A)e_0\|_A}{\|e_0\|_A} \leq \inf_{p \in P_n} \max_{\lambda \in \Lambda(A)} |p(\lambda)|,
+             $$
+             onde $\Lambda(A)$ denota o espectro de A.
+            
+        \subsection{Taxa de convergência}
+            O último teorema acima estabelece que a taxa de convergência do método de gradientes conjugados é determinado pela localização do espectro de $A$. Um bom espectro é o tem seus polinômios $p_n \in P_n$ podendo ser bem pequenos, com o tamanho diminuindo rapidamente com $n$. Dois corolários desse teorema explicam como isso pode acontecer:\\
+            \textbf{Corolário:} Se $A$ tem apenas $n$ autovalores distintos, então o método de gradientes conjugados converge em no máximo $n$ passos.
+            
+            No outro extremo:\\
+            \textbf{Corolário:} Tome o método de gradientes conjugados aplicado a um problema $Ax=b$, com $A$ simétrica, definida positiva e cujo número de condição 2-norma é $\kappa$. Então as $A$-normas dos erros satisfazem
+            $$
+                \frac{\|e_n\|_A}{\|e_0\|_A} \leq 2 \left/ \left[ \left( \frac{\sqrt{\kappa}+1}{\sqrt{\kappa}-1} \right)^n + \left( \frac{\sqrt{\kappa}+1}{\sqrt{\kappa}-1} \right)^{-n} \right] \leq 2 \left( \frac{\sqrt{\kappa}-1}{\sqrt{\kappa}+1} \right)^n.
+            $$
+            
+            Este segundo corolário é o mais famoso sobre a convergência do método de gradientes conjugados. Como
+            $$
+                \frac{\sqrt{\kappa}-1}{\sqrt{\kappa}+1} ~ 1 - \frac{2}{\sqrt{\kappa}}
+            $$
+            quando $\kappa \to \infty$, isso implica que se $\kappa$ é grande mas não muito grande, a convergência para uma tolerância especificada pode ser de $\mathcal{O}(\sqrt{\kappa})$ iterações.
 
     \section{Experimentos}
+        \subsection{Gerador de testes}
+            Usando a ideia do exemplo no capítulo 38 do livro \textit{"Numerical Linear Algebra"}, fiz um programa em \textit{FORTRAN} que gera matrizes positivas definidas, simétricas e esparsas. O código que está em \texttt{generator.f90} recebe a dimensão \texttt{m} do sistema a ser gerado aleatoriamente e o parâmetro $\tau$ que controla o quão esparsa será a matriz $A$. O programa imprime, na primeira linha, o valor \texttt{m}; nas $m^2$ linhas seguintes, dois inteiros $i,j$ e um real $a_{ij}$, tal que $A(i,j)=a_{ij}$; e nas últimas $m$ linhas imprime um inteiro $i$ e um real $b_i$, tal que $b(i)=b_i$. Esse é o formato de entrada que o arquivo \texttt{ep4.f90} com o método de gradientes conjugados aceita.
+        
+        \subsection{Comparando o consumo de tempo}    
+            Utilizando as mesmas entradas com a decomposição de Cholesky (código feito no \textbf{EP2}) e variando o valor de $\tau$, foi possível comparar o consumo de tempo (em segundos) dos algoritmos:
+            \begin{center}
+                \begin{tabular}{ | c | c | c | c | } 
+                    \hline
+                    & & \\ [-1em]
+                    $m$ & $\tau$ & Cholesky & Gradientes Conjugados\\  [+.5em]
+                    \hline\hline
+                    & & & \\ [-1em]
+                    500 & 0.01 & $ \times 10^{}$ & $ \times 10^{}$ \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    500 & 0.05 & $ \times 10^{}$ & $ \times 10^{}$ \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    500 & 0.1 & $ \times 10^{}$ & $ \times 10^{}$ \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    500 & 0.2 & $ \times 10^{}$ & $ \times 10^{}$ \\ [+.5em]
+                    \hline\hline
+                    & & & \\ [-1em]
+                    1000 & 0.01 & $ \times 10^{}$ & $ \times 10^{}$ \\ [+.5em]
+                    \hline
+                \end{tabular}
+            \end{center}
+            A partir da tabela acima, é possível concluir que
 
 \end{document}
