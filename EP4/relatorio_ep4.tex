@@ -13,7 +13,7 @@
 \usepackage{amssymb}
 \usepackage{float}
 \usepackage{geometry}
-\geometry{includeheadfoot,margin=2cm}
+\geometry{includeheadfoot,margin=1.9cm}
 \usepackage{algorithm}
 \usepackage{algorithmic}
 
@@ -104,7 +104,7 @@
 
     \section{Experimentos}
         \subsection{Gerador de testes}
-            Usando a ideia do exemplo no capítulo 38 do livro \textit{"Numerical Linear Algebra"}, fiz um programa em \textit{FORTRAN} que gera matrizes positivas definidas, simétricas e esparsas. O código que está em \texttt{generator.f90} recebe a dimensão \texttt{m} do sistema a ser gerado aleatoriamente e o parâmetro $\tau$ que controla o quão esparsa será a matriz $A$. O programa imprime, na primeira linha, o valor \texttt{m}; nas $m^2$ linhas seguintes, dois inteiros $i,j$ e um real $a_{ij}$, tal que $A(i,j)=a_{ij}$; e nas últimas $m$ linhas imprime um inteiro $i$ e um real $b_i$, tal que $b(i)=b_i$. Esse é o formato de entrada que o arquivo \texttt{ep4.f90} com o método de gradientes conjugados aceita.
+            Usando a ideia do exemplo no capítulo 38 do livro \textit{"Numerical Linear Algebra"}, fiz um programa em \textit{FORTRAN} que gera matrizes positivas definidas, simétricas e esparsas. O código que está em \texttt{generator.f90} recebe a dimensão \texttt{m} do sistema a ser gerado aleatoriamente e o parâmetro $\tau$ que controla o quão esparsa será a matriz $A$. O programa imprime, na primeira linha, o valor \texttt{m}; nas $m^2$ linhas seguintes, dois inteiros $i,j$ e um real $a_{ij}$, tal que $A(i,j)=a_{ij}$; e nas últimas $m$ linhas imprime um inteiro $i$ e um real $b_i$, tal que $b(i)=b_i$. Esse é o formato de entrada que o arquivo \texttt{ep4.f90} com o método de gradientes conjugados (e também o arquivo \texttt{ep2.f90} entregue anteriormente com a decomposição de Cholesky) aceita.
         
         \subsection{Comparando o consumo de tempo}    
             Utilizando as mesmas entradas com a decomposição de Cholesky (código feito no \textbf{EP2}) e variando o valor de $\tau$, foi possível comparar o consumo de tempo (em segundos) dos algoritmos:
@@ -115,22 +115,31 @@
                     $m$ & $\tau$ & Cholesky & Gradientes Conjugados\\  [+.5em]
                     \hline\hline
                     & & & \\ [-1em]
-                    500 & 0.01 & $ \times 10^{}$ & $ \times 10^{}$ \\ [+.5em]
+                    500 & 0.01 & $ 6.37\times 10^{-2}$ & $ 2.93 \times 10^{-3}$ \\ [+.5em]
                     \hline
                     & & & \\ [-1em]
-                    500 & 0.05 & $ \times 10^{}$ & $ \times 10^{}$ \\ [+.5em]
+                    500 & 0.05 & $ 6.37 \times 10^{-2}$ & $ 6.33 \times 10^{-3}$ \\ [+.5em]
                     \hline
                     & & & \\ [-1em]
-                    500 & 0.1 & $ \times 10^{}$ & $ \times 10^{}$ \\ [+.5em]
+                    500 & 0.1 & $ 6.37 \times 10^{-2}$ & $ 2.02 \times 10^{-2}$ \\ [+.5em]
                     \hline
                     & & & \\ [-1em]
-                    500 & 0.2 & $ \times 10^{}$ & $ \times 10^{}$ \\ [+.5em]
+                    500 & 0.2 & $ 6.20 \times 10^{-2}$ & $ 4.50 \times 10^{-1}$ \\ [+.5em]
                     \hline\hline
                     & & & \\ [-1em]
-                    1000 & 0.01 & $ \times 10^{}$ & $ \times 10^{}$ \\ [+.5em]
+                    1000 & 0.01 & $ 5.02 \times 10^{-1}$ & $ 1.43 \times 10^{-2}$ \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    1000 & 0.05 & $ 5.10 \times 10^{-1}$ & $ 3.32 \times 10^{-2}$ \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    1000 & 0.1 & $ 4.81 \times 10^{-1}$ & $ 1.19 $ \\ [+.5em]
+                    \hline
+                    & & & \\ [-1em]
+                    1000 & 0.2 & $ 5.02 \times 10^{-1}$ & $ 5.21 $ \\ [+.5em]
                     \hline
                 \end{tabular}
             \end{center}
-            A partir da tabela acima, é possível concluir que
+            A partir da tabela acima, é possível concluir que conforme mais esparsa (principalmente com $\tau = 0.01$) fica a matriz, mais compensa utilizar o método de gradientes conjugados. No entanto, quando a matriz não é esparsa ($\tau = 0.2$), o método de Cholesky é melhor. 
 
 \end{document}

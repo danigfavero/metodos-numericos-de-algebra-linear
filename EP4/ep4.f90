@@ -53,9 +53,10 @@ subroutine cg(m, A, b, x)
     integer, intent(in) :: m
     real(dp) :: A(m,m), b(m)
     real(dp) :: x(m), p(m), Ap(m)
-    real(dp) :: alpha, beta, bTb, prev_bTb, dotproduct
+    real(dp) :: alpha, beta, bTb, prev_bTb, dotproduct, eps
     integer :: i, iter
 
+    eps = epsilon(eps)
     do i=1,m
         x(m) = 0
     enddo
@@ -63,7 +64,7 @@ subroutine cg(m, A, b, x)
 
     iter = 0
     bTb = dotproduct(m, b, b)
-    do while (iter < 10) ! condição de parada provisória
+    do while (bTb > eps) 
         call matrixvector(m, m, A, p, Ap)
         alpha = bTb / dotproduct(m, p, Ap)
 
@@ -83,8 +84,6 @@ subroutine cg(m, A, b, x)
             p(i) = b(i) + (beta * p(i))
         enddo
 
-        iter = iter + 1
-
     enddo
 
 
@@ -96,6 +95,7 @@ program ep4
     integer :: m, i, j, k
     real(dp), allocatable :: A(:,:), b(:), x(:)
     real(dp) :: aij, bi
+    real(kind=8)::start, finish
 
     read (*,*) m
 
@@ -121,9 +121,10 @@ program ep4
         endif
     enddo
 
+    call cpu_time(start)
     call cg(m, A, b, x)
-
-    print *, x
+    call cpu_time(finish)
+    print *, finish-start
 
     deallocate(A)
     deallocate(b)
